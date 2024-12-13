@@ -4,6 +4,16 @@ import Loader from "../components/Loader";
 import DummyHeader from "../components/DummyHeader";
 import TOKENNAME from "./Token";
 
+// type UserType = {
+//     email:string,
+//     isAdmin:boolean,
+//     joinedOn:Date,
+//     userId:number,
+//     username:string,
+//     _id:string
+// }
+
+
 interface AuthContextType {
     isLoggedIn: boolean;
     storeTokenInLS: (serverToken: string) => void;
@@ -17,6 +27,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isLoading, setLoading] = React.useState(false);
     const[token, setToken] = React.useState(localStorage.getItem(TOKENNAME));
     const [user, setUser] = React.useState("");
+    // const [user, setUser] = React.useState<UserType>({
+    //     email: "",
+    //     isAdmin: false,
+    //     joinedOn: new Date(),
+    //     userId: 0,
+    //     username: "",
+    //     _id: "",
+    // });
 
     const storeTokenInLS = (serverToken: string) => {
         setToken(serverToken);
