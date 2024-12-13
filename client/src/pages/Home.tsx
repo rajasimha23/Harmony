@@ -26,7 +26,6 @@ function Home() {
     // }
 
     const {user}:any = useAuth();
-    const userID:string = user._id;
     const [isLoading, setLoading] = useState(false);
     const [chatrooms, setChatrooms] = useState([]);
 
@@ -56,12 +55,14 @@ function Home() {
     // }
     async function fetchChatrooms() {
         try {
+            setLoading(true);
             const response = await fetch(LINK + "api/chatroom/fetch", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
+            setLoading(false);
     
             if (!response.ok) {
                 throw new Error("Failed to fetch chatrooms");

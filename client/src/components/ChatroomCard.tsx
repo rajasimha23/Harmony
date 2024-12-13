@@ -1,5 +1,3 @@
-import React from 'react'
-
 type CardType = {
     chatroomName:string,
     createdAt:Date,
