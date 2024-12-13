@@ -6,9 +6,9 @@ const chatroomSchema = z.object({
     .min(3, {message: "Minimum 3 Characters Needed"})
     .max(255, {message: "Max limit of 255 Characters"}),
 
-    userId: z.number({required_error: "Creator's UserID is required"}),
+    creatorUserId: z.number({required_error: "Creator's UserID is required"}),
 
-    username: z.string({required_error: "Username of Creator is required"})
+    creatorUsername: z.string({required_error: "Username of Creator is required"})
 });
 
 export default chatroomSchema;

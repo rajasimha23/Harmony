@@ -4,17 +4,17 @@ import User from "../models/user-model.js";
 
 export const addChatroom = async (req, res, next) => {
     try{
-        const {chatroomName, userId, username} = req.body;
-        console.log(chatroomName, userId);  
+        const {chatroomName, creatorUserId, creatorUsername} = req.body;
+        console.log(chatroomName, creatorUserId);  
         const chatroomExists = await Chatroom.findOne({chatroomName:chatroomName});
         if (chatroomExists) {
             return res.status(400).send({msg: "Chatroom Already Exists"});
         }
-        const userDetails = await User.findOne({userId: userId, username:username});
+        const userDetails = await User.findOne({userId: creatorUserId, username:creatorUsername});
         if (!userDetails.isAdmin) {
             return res.status(400).send({msg: "User Does not have permission to Create Chatroom"});
         }
-        const newChatroom = await Chatroom.create({chatroomName, userId, username});
+        const newChatroom = await Chatroom.create({chatroomName, creatorUserId, creatorUsername});
         res.status(200).json({msg: `Creation of Chatroom ${chatroomName} Successful`});
     }
     catch (err) {
