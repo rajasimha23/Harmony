@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import LINK from "./Link";
 import Loader from "../components/Loader";
 import DummyHeader from "../components/DummyHeader";
@@ -19,6 +19,8 @@ interface AuthContextType {
     storeTokenInLS: (serverToken: string) => void;
     LogoutUser: () => void;
     user: any;
+    setLastPage: any;
+    lastPage: string;
 }
 
 export const AuthContext = React.createContext<AuthContextType|null>(null);
@@ -27,6 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isLoading, setLoading] = React.useState(false);
     const[token, setToken] = React.useState(localStorage.getItem(TOKENNAME));
     const [user, setUser] = React.useState("");
+    const [lastPage, setLastPage] = useState("/home");
     // const [user, setUser] = React.useState<UserType>({
     //     email: "",
     //     isAdmin: false,
@@ -75,7 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         userAuthentication();
     }, [token]);
     
-    return (<AuthContext.Provider value={{isLoggedIn, storeTokenInLS, LogoutUser, user}}>
+    return (<AuthContext.Provider value={{isLoggedIn, storeTokenInLS, LogoutUser, user, setLastPage, lastPage}}>
         {isLoading?<><DummyHeader /><Loader /></> :children}
     </AuthContext.Provider>);
 };

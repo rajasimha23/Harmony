@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const CreateChatroom = () => {
 
     const [roomName, setRoomName] = useState("");
-    const {user} = useAuth();
+    const {user, lastPage} = useAuth();
     const navigate = useNavigate();
 
     async function createFunction() {
@@ -25,7 +25,7 @@ const CreateChatroom = () => {
         }); 
         toast(resp.message);
 
-        navigate("/home");
+        navigate(lastPage);
     } 
 
   return (

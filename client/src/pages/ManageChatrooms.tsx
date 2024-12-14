@@ -4,10 +4,11 @@ import useAuth from "../store/Auth";
 import Loader from "../components/Loader";
 import TOKENNAME from "../store/Token";
 import LINK from "../store/Link";
-import ChatroomCard from "../components/ChatroomCard";
 import {toast} from "react-toastify";
+import ChatroomRow from "../components/ChatroomRow";
+import { FaTrashAlt } from "react-icons/fa";
 
-function Home() {
+function ManageChatrooms() {
     const navigate = useNavigate();
     const currToken = localStorage.getItem(TOKENNAME);
 
@@ -16,15 +17,6 @@ function Home() {
             navigate("/login"); 
         }
     }, [currToken]);
-
-    // type UserType = {
-    //     email:string,
-    //     isAdmin:boolean,
-    //     joinedOn:Date,
-    //     userId:number,
-    //     username:string,
-    //     _id:string
-    // }
 
     const {user, setLastPage}:any = useAuth();
     const [isLoading, setLoading] = useState(true);
@@ -40,8 +32,8 @@ function Home() {
         chatroomId:number
     }
 
-    function createChatroomCards(entry:CardType){
-        return <ChatroomCard chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
+    function createChatroomRows(entry:CardType){
+        return <ChatroomRow chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
         key={entry.chatroomUserId} chatroomId={entry.chatroomId} 
         deleteHandler={deleteChatroom} setChatroomMethod={setChatroomId}/>
     }
@@ -113,7 +105,7 @@ function Home() {
     }
     useEffect(()=>{
         fetchChatrooms();
-        setLastPage("/home");
+        setLastPage("/manage");
     },[])
 
     return <>
@@ -129,10 +121,18 @@ function Home() {
                     </div></div>): (
                     <div className="mx-5">
                         <div className="flex flex-col justify-center items-center w-full h-90vh">
-                            <h1 className="mb-5 text-4xl md:text-5xl text-center">Welcome, {user.username}</h1>
-                            <div className="space-x-4 space-y-4">
-                                {chatrooms.map(createChatroomCards)}
+                            <h1 className="mb-5 text-4xl md:text-5xl text-center">Welcome, {user.username}</h1> 
+                            
+                            <div className="bg-[#5c5c5c] rounded-xl flex flex-col md:w-7/12">
+                                <div className="py-6 px-4 group flex flex-row items-center">
+                                    <FaTrashAlt className="text-white text-xl opacity-0 group-hover:opacity-0 transition-opacity duration-500 mr-2"/>
+                                    <h1 className='text-2xl text-white w-6/12 text-left'>Chatroom</h1>
+                                    <h2 className="text-2xl text-white w-3/12 text-left">Creator</h2>
+                                    <h2 className="text-2xl text-white w-3/12 text-left">Created</h2>
+                                </div>
+                                {chatrooms.map(createChatroomRows)}
                             </div>
+                            
                             {(!user.isAdmin)?(null):(
                                 <button className="customButton mt-5" onClick={()=>{navigate("/createChatroom")}}>Add Chatroom</button>
                             )}
@@ -144,4 +144,4 @@ function Home() {
     </>
 }   
 
-export default Home;
+export default ManageChatrooms;
