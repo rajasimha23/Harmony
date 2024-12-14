@@ -29,7 +29,6 @@ function Home() {
     const {user}:any = useAuth();
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
-    const [confirmScreen, setConfirmScreen] = useState([]);
 
     type CardType = {
         chatroomUserId:number,
