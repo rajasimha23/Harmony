@@ -5,6 +5,7 @@ import Loader from "../components/Loader";
 import TOKENNAME from "../store/Token";
 import LINK from "../store/Link";
 import ChatroomCard from "../components/ChatroomCard";
+import {toast} from "react-toastify";
 
 function Home() {
     const navigate = useNavigate();
@@ -28,16 +29,50 @@ function Home() {
     const {user}:any = useAuth();
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
+    const [confirmScreen, setConfirmScreen] = useState([]);
 
     type CardType = {
         chatroomUserId:number,
         chatroomName:string,
         createdAt:Date,
         creatorUsername:string
+        chatroomId:number
     }
 
     function createChatroomCards(entry:CardType){
-        return <ChatroomCard chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} key={entry.chatroomUserId}/>
+        return <ChatroomCard chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
+        key={entry.chatroomUserId} chatroomId={entry.chatroomId} 
+        deleteHandler={deleteChatroom} />
+    }
+
+    async function deleteChatroom(chatroomId:number) {
+        try {
+            setLoading(true);
+            const response = await fetch(LINK + "api/chatroom/remove", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    chatroomId:chatroomId,
+                    userId: user.userId
+                })
+            });
+            if (response.ok) {
+                toast("Successfully Deleted Chatroom");
+                fetchChatrooms();
+            }
+            else {
+                const res_data = await response.json();
+                toast(res_data.message);
+            }
+        }
+        catch {
+
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     async function fetchChatrooms() {
@@ -62,9 +97,9 @@ function Home() {
             }
     
             setChatrooms(resp.chatrooms);
-            console.log("Fetched Chatrooms: ", resp.chatrooms);
+            //console.log("Fetched Chatrooms: ", resp.chatrooms);
         } catch (error) {
-            console.error("Error fetching chatrooms:", error);
+            //console.error("Error fetching chatrooms:", error);
             setChatrooms([]); // Fallback to empty array
         }   finally {
             setLoading(false);
@@ -74,23 +109,21 @@ function Home() {
     useEffect(()=>{
         fetchChatrooms();
     },[])
-    
-
 
     return <>
-        {isLoading ?<Loader /> : 
-            (<div className="mx-5">
+        {isLoading ? <Loader /> : 
+            <div className="mx-5">
                 <div className="flex flex-col justify-center items-center w-full h-90vh">
                     <h1 className="mb-5 text-4xl md:text-5xl text-center">Welcome, {user.username}</h1>
-                    <div className="space-x-4 space-y-3">
+                    <div className="space-x-4 space-y-4">
                         {chatrooms.map(createChatroomCards)}
                     </div>
                     {(!user.isAdmin)?(null):(
                         <button className="customButton mt-5" onClick={()=>{navigate("/createChatroom")}}>Add Chatroom</button>
                     )}
                 </div>
-                
-            </div> )}
+            </div>
+        }
     </>
 }   
 
