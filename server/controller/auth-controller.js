@@ -27,16 +27,13 @@ const login = async (req, res)=> {
         }
         const correctPass = await userExists.checkPassword(password);
         if (correctPass) {
-            console.log("reached here");
             return res.status(200).json({message: "Login Successful", token: await userExists.generateToken(), userId: userExists._id.toString()});
         }
         else {
-            console.log("reached here 2");
             return res.status(400).json({message: "Error: Invalid Credentials", extraDetails: "Error: Invalid Credentials"});
         }
     }
     catch (err) {
-        console.log("reached here 3");
         const status = 400;
         const message = "Error in Login";
         const extraDetails = err.errors[0].message;

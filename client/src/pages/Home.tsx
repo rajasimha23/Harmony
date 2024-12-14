@@ -29,6 +29,8 @@ function Home() {
     const {user}:any = useAuth();
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
+    const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+    const [selectedChatroomId, setChatroomId] = useState(0);
 
     type CardType = {
         chatroomUserId:number,
@@ -41,11 +43,13 @@ function Home() {
     function createChatroomCards(entry:CardType){
         return <ChatroomCard chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
         key={entry.chatroomUserId} chatroomId={entry.chatroomId} 
-        deleteHandler={deleteChatroom} />
+        deleteHandler={deleteChatroom} setChatroomMethod={setChatroomId}/>
     }
 
-    async function deleteChatroom(chatroomId:number) {
+
+    async function confirmDeleteChatroom() {
         try {
+            setDeleteConfirmation(false);
             setLoading(true);
             const response = await fetch(LINK + "api/chatroom/remove", {
                 method: "DELETE",
@@ -53,7 +57,7 @@ function Home() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    chatroomId:chatroomId,
+                    chatroomId:selectedChatroomId,
                     userId: user.userId
                 })
             });
@@ -72,6 +76,10 @@ function Home() {
         finally {
             setLoading(false);
         }
+    }
+
+    async function deleteChatroom() {
+        setDeleteConfirmation(true)
     }
 
     async function fetchChatrooms() {
@@ -96,10 +104,8 @@ function Home() {
             }
     
             setChatrooms(resp.chatrooms);
-            //console.log("Fetched Chatrooms: ", resp.chatrooms);
         } catch (error) {
-            //console.error("Error fetching chatrooms:", error);
-            setChatrooms([]); // Fallback to empty array
+            setChatrooms([]); 
         }   finally {
             setLoading(false);
         }
@@ -111,17 +117,28 @@ function Home() {
 
     return <>
         {isLoading ? <Loader /> : 
-            <div className="mx-5">
-                <div className="flex flex-col justify-center items-center w-full h-90vh">
-                    <h1 className="mb-5 text-4xl md:text-5xl text-center">Welcome, {user.username}</h1>
-                    <div className="space-x-4 space-y-4">
-                        {chatrooms.map(createChatroomCards)}
-                    </div>
-                    {(!user.isAdmin)?(null):(
-                        <button className="customButton mt-5" onClick={()=>{navigate("/createChatroom")}}>Add Chatroom</button>
-                    )}
-                </div>
-            </div>
+            <>
+                {deleteConfirmation? 
+                    (<div className="mx-5"><div className="flex flex-col justify-center items-center w-full h-90vh">
+                        <h1 className="text-5xl text-center">Do You Really Want to Delete this Entry?</h1><br />
+                        <div>
+                            <button className="w-32 h-12 mx-2 customButton" onClick={()=>{setDeleteConfirmation(false)}}><h6 className="text-xl">Cancel</h6></button>
+                            <button className="w-32 h-12 mx-2 customButton" onClick={confirmDeleteChatroom}><h6 className="text-xl">Yes</h6></button>
+                        </div>
+                    </div></div>): (
+                    <div className="mx-5">
+                        <div className="flex flex-col justify-center items-center w-full h-90vh">
+                            <h1 className="mb-5 text-4xl md:text-5xl text-center">Welcome, {user.username}</h1>
+                            <div className="space-x-4 space-y-4">
+                                {chatrooms.map(createChatroomCards)}
+                            </div>
+                            {(!user.isAdmin)?(null):(
+                                <button className="customButton mt-5" onClick={()=>{navigate("/createChatroom")}}>Add Chatroom</button>
+                            )}
+                        </div>
+                    </div>)
+                }
+            </>
         }
     </>
 }   

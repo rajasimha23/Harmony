@@ -8,7 +8,8 @@ type CardType = {
     chatroomId:number,
     key:number,
     // deleteFunction:any
-    deleteHandler: (chatroomId: number) => void
+    deleteHandler: () => void
+    setChatroomMethod: any
 }
 
 const ChatroomCard = (props:CardType) => {
@@ -30,7 +31,7 @@ const ChatroomCard = (props:CardType) => {
                 {deleteConfirmation?(
                     <>
                         <h1 className='text-3xl text-red-400 mb-5'>Confirm Delete?</h1>
-                        <h2 className="text-xl text-red-200 mb-2"  onClick={()=>{setDeleteConfirmation(false);props.deleteHandler(props.chatroomId)}}>Yes</h2>
+                        <h2 className="text-xl text-red-200 mb-2"  onClick={()=>{setDeleteConfirmation(false);props.deleteHandler()}}>Yes</h2>
                         <h2 className="text-xl text-red-200 mb-2 " onClick={()=>{setDeleteConfirmation(false)}}>Cancel</h2>
                     </>
                     ):(
@@ -41,7 +42,7 @@ const ChatroomCard = (props:CardType) => {
                         <div className="flex justify-center items-center mt-3">
                             <FaTrashAlt
                                 className="text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                                onClick={() => {initialDelete()}}
+                                onClick={() => {props.setChatroomMethod(props.chatroomId); props.deleteHandler()}}
                             />
                         </div>
                     </>

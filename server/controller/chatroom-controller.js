@@ -4,8 +4,7 @@ import User from "../models/user-model.js";
 
 export const addChatroom = async (req, res, next) => {
     try{
-        const {chatroomName, creatorUserId, creatorUsername} = req.body;
-        console.log(chatroomName, creatorUserId, creatorUsername);  
+        const {chatroomName, creatorUserId, creatorUsername} = req.body; 
         const chatroomExists = await Chatroom.findOne({chatroomName:chatroomName});
         if (chatroomExists) {
             return res.status(400).send({message: "Chatroom Already Exists"});
