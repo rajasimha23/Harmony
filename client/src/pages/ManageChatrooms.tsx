@@ -12,17 +12,20 @@ function ManageChatrooms() {
     const navigate = useNavigate();
     const currToken = localStorage.getItem(TOKENNAME);
 
-    React.useEffect(() => {
-        if (!currToken) {
-            navigate("/login"); 
-        }
-    }, [currToken]);
-
+    
     const {user, setLastPage}:any = useAuth();
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
     const [deleteConfirmation, setDeleteConfirmation] = useState(false);
     const [selectedChatroomId, setChatroomId] = useState(0);
+    React.useEffect(() => {
+        if (!currToken) {
+            navigate("/login"); 
+        }
+        if (!user.isAdmin) {
+            navigate("/home");
+        }
+    }, [currToken]);
 
     type CardType = {
         chatroomUserId:number,
@@ -123,9 +126,9 @@ function ManageChatrooms() {
                         <div className="flex flex-col justify-center items-center w-full h-90vh">
                             <h1 className="mb-5 text-4xl md:text-5xl text-center">Welcome, {user.username}</h1> 
                             
-                            <div className="bg-[#5c5c5c] rounded-xl flex flex-col md:w-7/12">
-                                <div className="py-6 px-4 group flex flex-row items-center">
-                                    <FaTrashAlt className="text-white text-xl opacity-0 group-hover:opacity-0 transition-opacity duration-500 mr-2"/>
+                            <div className="bg-[#5c5c5c] flex flex-col md:w-7/12">
+                                <div className="bg-[#707070] py-6 px-4 group flex flex-row items-center">
+                                    <FaTrashAlt className="text-white text-xl opacity-0 group-hover:opacity-0 transition-opacity duration-500 mr-3"/>
                                     <h1 className='text-2xl text-white w-6/12 text-left'>Chatroom</h1>
                                     <h2 className="text-2xl text-white w-3/12 text-left">Creator</h2>
                                     <h2 className="text-2xl text-white w-3/12 text-left">Created</h2>

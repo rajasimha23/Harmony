@@ -22,7 +22,7 @@ const ChatroomRow = (props:CardType) => {
     return (
         <button>
             <div className=" py-6 px-4 group flex flex-row items-center">
-                <div className="mr-2">
+                <div className="mr-3">
                     { (!user.isAdmin) ? (null) : (<div className="flex justify-center items-center">
                         <FaTrashAlt
                             className="text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
