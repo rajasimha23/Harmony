@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../store/Auth";
 import Loader from "../components/Loader";
@@ -26,7 +26,7 @@ function Home() {
     // }
 
     const {user}:any = useAuth();
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
 
     type CardType = {
@@ -40,19 +40,6 @@ function Home() {
         return <ChatroomCard chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} key={entry.chatroomUserId}/>
     }
 
-    // async function fetchChatrooms(){
-    //     const response = await fetch(LINK + "api/chatroom/fetch", {
-    //         method: "GET",
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         },
-    //     }); 
-    //     const resp = await response.json();
-    //     const ArrayChatrooms:Array<any> = resp.chatrooms;
-    //     console.log(typeof ArrayChatrooms)
-    //     console.log(ArrayChatrooms);
-    //     if (response.ok) setChatrooms(ArrayChatrooms);
-    // }
     async function fetchChatrooms() {
         try {
             setLoading(true);
@@ -79,13 +66,16 @@ function Home() {
         } catch (error) {
             console.error("Error fetching chatrooms:", error);
             setChatrooms([]); // Fallback to empty array
+        }   finally {
+            setLoading(false);
         }
-    }
-    
 
-    React.useEffect(()=>{
+    }
+    useEffect(()=>{
         fetchChatrooms();
     },[])
+    
+
 
     return <>
         {isLoading ?<Loader /> : 
@@ -95,7 +85,11 @@ function Home() {
                     <div className="space-x-4 space-y-3">
                         {chatrooms.map(createChatroomCards)}
                     </div>
+                    {(!user.isAdmin)?(null):(
+                        <button className="customButton mt-5" onClick={()=>{navigate("/createChatroom")}}>Add Chatroom</button>
+                    )}
                 </div>
+                
             </div> )}
     </>
 }   

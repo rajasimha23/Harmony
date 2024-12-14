@@ -5,17 +5,17 @@ import User from "../models/user-model.js";
 export const addChatroom = async (req, res, next) => {
     try{
         const {chatroomName, creatorUserId, creatorUsername} = req.body;
-        console.log(chatroomName, creatorUserId);  
+        console.log(chatroomName, creatorUserId, creatorUsername);  
         const chatroomExists = await Chatroom.findOne({chatroomName:chatroomName});
         if (chatroomExists) {
-            return res.status(400).send({msg: "Chatroom Already Exists"});
+            return res.status(400).send({message: "Chatroom Already Exists"});
         }
         const userDetails = await User.findOne({userId: creatorUserId, username:creatorUsername});
         if (!userDetails.isAdmin) {
-            return res.status(400).send({msg: "User Does not have permission to Create Chatroom"});
+            return res.status(400).send({message: "User Does not have permission to Create Chatroom"});
         }
         const newChatroom = await Chatroom.create({chatroomName, creatorUserId, creatorUsername});
-        res.status(200).json({msg: `Creation of Chatroom ${chatroomName} Successful`});
+        res.status(200).json({message: `Creation of Chatroom ${chatroomName} Successful`});
     }
     catch (err) {
         const status = 404;
@@ -35,10 +35,10 @@ export const removeChatroom = async (req, res, next) => {
         const {chatroomId, userId} = req.body;
         const userDetails = await User.findOne({userId: userId});
         if (!userDetails.isAdmin) {
-            return res.status(400).send({msg: "User Does not have permission to Remove Chatroom"});
+            return res.status(400).send({message: "User Does not have permission to Remove Chatroom"});
         }
         const deletion = await Chatroom.deleteOne({chatroomId: chatroomId});
-        res.status(200).json({msg: `Removal of Chatroom ${chatroomId} Successful`});
+        res.status(200).json({message: `Removal of Chatroom ${chatroomId} Successful`});
     }
     catch (err) {
         const status = 404;
@@ -56,7 +56,7 @@ export const removeChatroom = async (req, res, next) => {
 export const getChatrooms = async (req, res, next) => {
     try{
         const chatrooms = await Chatroom.find();
-        res.status(200).json({msg: `Fetching Chatrooms was Successful`, chatrooms:chatrooms});
+        res.status(200).json({message: `Fetching Chatrooms was Successful`, chatrooms:chatrooms});
     }
     catch (err) {
         const status = 404;

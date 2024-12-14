@@ -18,7 +18,7 @@ interface AuthContextType {
     isLoggedIn: boolean;
     storeTokenInLS: (serverToken: string) => void;
     LogoutUser: () => void;
-    user: string;
+    user: any;
 }
 
 export const AuthContext = React.createContext<AuthContextType|null>(null);
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setLoading(false);
             if (response.ok) {
                 const data = await response.json();
-                const userData = data.msg;
+                const userData = data.message;
                 setUser(userData);
             }
         }

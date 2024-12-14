@@ -3,7 +3,7 @@ import User from "../models/user-model.js";
 
 // const home = async (req, res)=> {
 //     try{
-//         res.status(200).send({msg: "Hi, This is Khalid from API"});
+//         res.status(200).send({message: "Hi, This is Khalid from API"});
 //     }
 //     catch (err) {
 //         const status = 404;
@@ -23,18 +23,21 @@ const login = async (req, res)=> {
         const {email, password } = req.body;
         const userExists = await User.findOne({email: email});
         if (!userExists) {
-            return res.status(400).json({msg: "Error: Invalid Credentials", extraDetails: "Error: Invalid Credentials"});
+            return res.status(400).json({message: "Error: Invalid Credentials", extraDetails: "Error: Invalid Credentials"});
         }
         const correctPass = await userExists.checkPassword(password);
         if (correctPass) {
-            return res.status(200).json({msg: "Login Successful", token: await userExists.generateToken(), userId: userExists._id.toString()});
+            console.log("reached here");
+            return res.status(200).json({message: "Login Successful", token: await userExists.generateToken(), userId: userExists._id.toString()});
         }
         else {
-            return res.status(400).json({msg: "Error: Invalid Credentials", extraDetails: "Error: Invalid Credentials"});
+            console.log("reached here 2");
+            return res.status(400).json({message: "Error: Invalid Credentials", extraDetails: "Error: Invalid Credentials"});
         }
     }
     catch (err) {
-        const status = 404;
+        console.log("reached here 3");
+        const status = 400;
         const message = "Error in Login";
         const extraDetails = err.errors[0].message;
         const errorDetails = {
@@ -51,10 +54,10 @@ const register = async (req, res)=> {
         const {username, phone, email, password,isAdmin = false} = req.body;
         const userExists = await User.findOne({username: username});
         if (userExists) {
-            return res.status(400).json({msg: "User Already Exists"});
+            return res.status(400).json({message: "User Already Exists"});
         }
         const newUser = await User.create({username, phone, email, password, isAdmin});
-        res.status(200).json({msg: "Registration Successful", token: await newUser.generateToken(), userId: newUser._id.toString()});
+        res.status(200).json({message: "Registration Successful", token: await newUser.generateToken(), userId: newUser._id.toString()});
     }
     catch (err) {
         const status = 404;
@@ -72,7 +75,7 @@ const register = async (req, res)=> {
 const user = async (req, res) => {
     try {
         const userData = req.user;
-        return res.status(200).json({msg: userData});
+        return res.status(200).json({message: userData});
     }
     catch (err) {
         const status = 401;
