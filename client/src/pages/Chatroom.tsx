@@ -33,6 +33,7 @@ const Chatroom = () => {
         timestamp: Date;
     };
     const {user} = useAuth();
+    console.log("Current User: " + user.username + "\tId: " + user.userId);
     const { chatroomId } = useParams();
     const [chatroomData, setChatroomData] = useState<ChatroomType>({
         _id: '',
