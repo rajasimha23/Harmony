@@ -1,4 +1,4 @@
-//const LINK = "https://journalling.onrender.com/";
-const LINK:string = "http://localhost:5000/";
+const LINK = "https://chatroom-re0i.onrender.com";
+// const LINK:string = "http://localhost:5000/";
 
 export default LINK;
