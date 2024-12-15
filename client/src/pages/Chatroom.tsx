@@ -120,25 +120,28 @@ const Chatroom = () => {
     if (loading) return <Loader />;
 
     return (
-        <div className="flex flex-col justify-center items-center w-screen h-90vh">
-            <h1>{chatroomData.chatroomName}</h1>
-            <div className="chat-window">
-                {messages.map((msg, index) => (
-                    <div key={index}>
-                        <strong>{msg.username}</strong>: {msg.message}
-                    </div>
-                ))}
+        <>
+            <div className="flex flex-col justify-center items-center w-screen h-90vh">
+            <h1 className='text-5xl text-white text-center mb-8'>{chatroomData.chatroomName}</h1>
+                <div className="bg-[#c7c7c7] chat-window w-7/12 h-96 p-8 rounded-xl">
+                    {messages.map((msg, index) => (
+                        <div key={index}>
+                            <strong>{msg.username}</strong>: {msg.message}
+                        </div>
+                    ))}
+                </div>
+                <div className="chat-input w-7/12 mt-3">
+                    <input
+                    className='w-6/12 h-10 rounded-lg px-3'
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        placeholder="Type your message"
+                    />
+                    <button onClick={sendMessage} className='customButton ml-4'>Send</button>
+                </div>
             </div>
-            <div className="chat-input">
-                <input
-                    type="text"
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Type your message"
-                />
-                <button onClick={sendMessage}>Send</button>
-            </div>
-        </div>
+        </>
     );
 };
 
