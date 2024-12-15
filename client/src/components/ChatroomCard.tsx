@@ -19,22 +19,6 @@ const ChatroomCard = (props:CardType) => {
     const formattedDate = unformattedDate.toLocaleDateString('en-US', options);
     const {user} = useAuth();
 
-
-    // return (
-    //     <>
-    //         <div className="bg-[#5c5c5c] rounded-xl py-6 px-4 group text-center mx-3 my-3">
-    //             <h1 className='text-3xl text-purple-400 mb-5 cursor-pointer' onClick={()=>{navigate(`/chatroom/${props.chatroomId}`)}}>{props.chatroomName}</h1>
-    //             <h2 className="text-xl text-blue-200 mb-2">Creator: {props.creatorUsername}</h2>
-    //             <h2>{formattedDate}</h2>
-    //             { (!user.isAdmin) ? (null) : (<div className="flex justify-center items-center mt-3">
-    //                 <FaTrashAlt
-    //                     className="text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-    //                     onClick={() => {props.setChatroomMethod(props.chatroomId); props.deleteHandler()}}
-    //                 />
-    //             </div>)}
-    //         </div>
-    //     </>
-    // )
     return (
         <>
             <div
@@ -44,7 +28,7 @@ const ChatroomCard = (props:CardType) => {
                 <h1
                     className="text-3xl text-purple-400 mb-5 cursor-pointer"
                     onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering div's onClick
+                        e.stopPropagation(); 
                         navigate(`/chatroom/${props.chatroomId}`);
                     }}
                 >
@@ -57,7 +41,7 @@ const ChatroomCard = (props:CardType) => {
                         <FaTrashAlt
                             className="text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                             onClick={(e) => {
-                                e.stopPropagation(); // Prevent triggering div's onClick
+                                e.stopPropagation(); 
                                 props.setChatroomMethod(props.chatroomId);
                                 props.deleteHandler();
                             }}
