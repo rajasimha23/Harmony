@@ -1,23 +1,6 @@
 import express from "express";
 import User from "../models/user-model.js";
 
-// const home = async (req, res)=> {
-//     try{
-//         res.status(200).send({message: "Hi, This is Khalid from API"});
-//     }
-//     catch (err) {
-//         const status = 404;
-//         const message = "Error in home page";
-//         const extraDetails = err.errors[0].message;
-//         const errorDetails = {
-//             message,
-//             status,
-//             extraDetails
-//         }
-//         next(errorDetails);
-//     }
-// };
-
 const login = async (req, res)=> {
     try{
         const {email, password } = req.body;
