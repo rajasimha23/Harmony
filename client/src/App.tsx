@@ -7,6 +7,7 @@ import Header from "./components/Header"
 import DummyHeader from "./components/DummyHeader"
 import CreateChatroom from "./pages/CreateChatroom"
 import ManageChatrooms from "./pages/ManageChatrooms"
+import Chatroom from "./pages/Chatroom"
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path='/logout' element={<><Header /><Logout /></>} />
           <Route path='/createChatroom' element={<><Header /><CreateChatroom /></>} />
           <Route path='/manage' element={<><Header /><ManageChatrooms /></>} />
+          <Route path="/chatroom/:chatroomId" element={<><Header /><Chatroom /></>} />
         </Routes>
       </BrowserRouter>
     </>

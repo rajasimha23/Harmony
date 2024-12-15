@@ -52,10 +52,30 @@ export const removeChatroom = async (req, res, next) => {
     }
 }
 
-export const getChatrooms = async (req, res, next) => {
+export const fetchChatrooms = async (req, res, next) => {
     try{
         const chatrooms = await Chatroom.find();
         res.status(200).json({message: `Fetching Chatrooms was Successful`, chatrooms:chatrooms});
+    }
+    catch (err) {
+        const status = 404;
+        const message = "Error in Fetching Chatrooms";
+        const extraDetails = "Not much";
+        const errorDetails = {
+            message,
+            status,
+            extraDetails
+        }
+        next(errorDetails);
+    }
+}
+
+
+export const getChatroom = async (req, res, next) => {
+    try{
+        const {chatroomId} = req.body
+        const chatroomInfo = await Chatroom.find({chatroomId: chatroomId});
+        res.status(200).json({message: `Getting Chatroom was Successful`, chatroomInfo:chatroomInfo});
     }
     catch (err) {
         const status = 404;

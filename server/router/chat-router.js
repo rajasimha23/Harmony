@@ -1,7 +1,7 @@
 import express from "express";
-import * as chatControllers from "../controller/chat-controller";
-import chatSchema from "../validators/chat-validator";
-import validateChat from "../middlewares/chat-middleware";
+import * as chatControllers from "../controller/chat-controller.js";
+import chatSchema from "../validators/chat-validator.js";
+import validateChat from "../middlewares/chat-middleware.js";
 const router = express.Router();
 
 router.route("/add").post(validateChat(chatSchema),chatControllers.addChat);

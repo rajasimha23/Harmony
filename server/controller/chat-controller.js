@@ -1,6 +1,4 @@
 import express from "express";
-import Chatroom from "../models/chatroom-model.js";
-import User from "../models/user-model.js";
 import Chat from "../models/chat-model.js";
 
 export const addChat = async (req, res, next) => {
@@ -25,7 +23,7 @@ export const addChat = async (req, res, next) => {
 export const deleteChat = async (req, res, next) => {
     try{
         const {chatId} = req.body;
-        const deletion = await Chatroom.updateOne({_id: chatId}, {isDeleted:true});
+        const deletion = await Chat.updateOne({_id: chatId}, {isDeleted:true});
         res.status(200).json({message: `Removal of Chat Successful`});
     }
     catch (err) {
@@ -63,7 +61,7 @@ export const fetchChat = async (req, res, next) => {
 export const updateChat = async (req, res, next) => {
     try{
         const {chatId, newMessage} = req.body;
-        const updation = await Chatroom.updateOne({_id: chatId}, {isEdited:true, message: newMessage});
+        const updation = await Chat.updateOne({_id: chatId}, {isEdited:true, message: newMessage});
         res.status(200).json({message: `Removal of Chat Successful`});
     }
     catch (err) {
