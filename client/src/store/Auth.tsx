@@ -19,7 +19,7 @@ interface AuthContextType {
     storeTokenInLS: (serverToken: string) => void;
     LogoutUser: () => void;
     user: any;
-    setLastPage: any;
+    setLastPage: (x:string)=>void;
     lastPage: string;
 }
 

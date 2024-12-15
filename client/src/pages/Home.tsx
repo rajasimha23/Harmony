@@ -42,7 +42,7 @@ function Home() {
 
     function createChatroomCards(entry:CardType){
         return <ChatroomCard chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
-        key={entry.chatroomUserId} chatroomId={entry.chatroomId} 
+        key={entry.chatroomId} chatroomId={entry.chatroomId} 
         deleteHandler={deleteChatroom} setChatroomMethod={setChatroomId}/>
     }
 

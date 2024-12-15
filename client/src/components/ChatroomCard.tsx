@@ -6,9 +6,8 @@ type CardType = {
     createdAt:Date,
     creatorUsername:string,
     chatroomId:number,
-    key:number,
     deleteHandler: () => void
-    setChatroomMethod: any
+    setChatroomMethod: (x:number)=>void
 }
 
 const ChatroomCard = (props:CardType) => {

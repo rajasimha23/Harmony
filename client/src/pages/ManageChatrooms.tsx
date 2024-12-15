@@ -37,7 +37,7 @@ function ManageChatrooms() {
 
     function createChatroomRows(entry:CardType){
         return <ChatroomRow chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
-        key={entry.chatroomUserId} chatroomId={entry.chatroomId} 
+        key={entry.chatroomId} chatroomId={entry.chatroomId} 
         deleteHandler={deleteChatroom} setChatroomMethod={setChatroomId}/>
     }
 
