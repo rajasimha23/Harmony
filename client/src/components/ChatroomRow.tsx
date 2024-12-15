@@ -13,7 +13,7 @@ type CardType = {
 const ChatroomRow = (props:CardType) => {
     const dateStr = props.createdAt;
     const unformattedDate = new Date(dateStr);
-    const options:any = { year: 'numeric', month: 'short', day: 'numeric' };
+    const options:Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
     const formattedDate = unformattedDate.toLocaleDateString('en-US', options);
     const {user} = useAuth();
 

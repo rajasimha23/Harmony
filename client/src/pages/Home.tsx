@@ -6,6 +6,7 @@ import TOKENNAME from "../store/Token";
 import LINK from "../store/Link";
 import ChatroomCard from "../components/ChatroomCard";
 import {toast} from "react-toastify";
+import { UserType } from "../store/Auth";
 
 function Home() {
     const navigate = useNavigate();
@@ -16,17 +17,8 @@ function Home() {
             navigate("/login"); 
         }
     }, [currToken]);
-
-    // type UserType = {
-    //     email:string,
-    //     isAdmin:boolean,
-    //     joinedOn:Date,
-    //     userId:number,
-    //     username:string,
-    //     _id:string
-    // }
-
-    const {user, setLastPage}:any = useAuth();
+    
+    const {user, setLastPage}:{user:UserType, setLastPage:(x:string)=>void} = useAuth();
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
     const [deleteConfirmation, setDeleteConfirmation] = useState(false);

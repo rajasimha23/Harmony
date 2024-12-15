@@ -11,8 +11,12 @@ const CreateChatroom = () => {
     const {user, lastPage} = useAuth();
     const navigate = useNavigate();
 
+    interface RespType{
+        message:string
+    }
+
     async function createFunction() {
-        const resp:any = await fetch(LINK + "api/chatroom/add", {
+        const resp = await fetch(LINK + "api/chatroom/add", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -23,7 +27,8 @@ const CreateChatroom = () => {
                 creatorUsername: user.username
             })
         }); 
-        toast(resp.message);
+        const responseData:RespType = await resp.json();
+        toast(responseData.message);
 
         navigate(lastPage);
     } 

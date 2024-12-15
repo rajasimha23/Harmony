@@ -7,13 +7,14 @@ import LINK from "../store/Link";
 import {toast} from "react-toastify";
 import ChatroomRow from "../components/ChatroomRow";
 import { FaTrashAlt } from "react-icons/fa";
+import { UserType } from "../store/Auth";
 
 function ManageChatrooms() {
     const navigate = useNavigate();
     const currToken = localStorage.getItem(TOKENNAME);
 
     
-    const {user, setLastPage}:any = useAuth();
+    const {user, setLastPage}:{user:UserType, setLastPage:(x:string)=>void} = useAuth();
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
     const [deleteConfirmation, setDeleteConfirmation] = useState(false);

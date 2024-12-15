@@ -4,21 +4,21 @@ import Loader from "../components/Loader";
 import DummyHeader from "../components/DummyHeader";
 import TOKENNAME from "./Token";
 
-// type UserType = {
-//     email:string,
-//     isAdmin:boolean,
-//     joinedOn:Date,
-//     userId:number,
-//     username:string,
-//     _id:string
-// }
+export type UserType = {
+    email:string,
+    isAdmin:boolean,
+    joinedOn:Date,
+    userId:number,
+    username:string,
+    _id:string
+}
 
 
 interface AuthContextType {
     isLoggedIn: boolean;
     storeTokenInLS: (serverToken: string) => void;
     LogoutUser: () => void;
-    user: any;
+    user: UserType;
     setLastPage: (x:string)=>void;
     lastPage: string;
 }
@@ -28,16 +28,15 @@ export const AuthContext = React.createContext<AuthContextType|null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isLoading, setLoading] = React.useState(false);
     const[token, setToken] = React.useState(localStorage.getItem(TOKENNAME));
-    const [user, setUser] = React.useState("");
     const [lastPage, setLastPage] = useState("/home");
-    // const [user, setUser] = React.useState<UserType>({
-    //     email: "",
-    //     isAdmin: false,
-    //     joinedOn: new Date(),
-    //     userId: 0,
-    //     username: "",
-    //     _id: "",
-    // });
+    const [user, setUser] = React.useState<UserType>({
+        email: "",
+        isAdmin: false,
+        joinedOn: new Date(),
+        userId: 0,
+        username: "",
+        _id: "",
+    });
 
     const storeTokenInLS = (serverToken: string) => {
         setToken(serverToken);
@@ -47,7 +46,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let isLoggedIn = !!token;
 
     const LogoutUser = () => {
-        console.log("Logged Out");
         setToken("");
         return localStorage.removeItem(TOKENNAME);
     };
