@@ -36,6 +36,10 @@ const io = new Server(server, {
     },
 });
 
+app.get('/', (req, res) => {
+    res.send('Hello from Node.js on Vercel!');
+  });
+
 io.on("connection", (socket) => {
     console.log("A user connected:", socket.id);
 
