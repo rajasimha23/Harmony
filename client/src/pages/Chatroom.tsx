@@ -172,12 +172,12 @@ const Chatroom = () => {
                                         </div>
                                     )}
                                     {(msg.username === user.username) ? (
-                                        <div key={index} className='bg-[#319b48] mb-3 py-2 px-2 rounded-xl max-w-md break-words self-end'>
+                                        <div key={index} className='bg-[#319b48] mb-3 py-2 px-4 rounded-xl max-w-md break-words self-end'>
                                             <strong>{"You"}</strong><br />{msg.message}<br />
                                             <p className='text-right text-xs'>{returnDisplayTime(msg.timestamp)}</p>
                                         </div>
                                     ) : (
-                                        <div key={index} className='bg-[#319b48] mb-3 py-2 px-2 rounded-xl max-w-md break-words'>
+                                        <div key={index} className='bg-[#319b48] mb-3 py-2 px-4 rounded-xl max-w-md break-words'>
                                             <strong>{msg.username}</strong><br />{msg.message}<br />
                                             <p className='text-right text-xs'>{returnDisplayTime(msg.timestamp)}</p>
                                         </div>
