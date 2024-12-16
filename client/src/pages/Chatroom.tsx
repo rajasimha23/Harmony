@@ -5,18 +5,17 @@ import { io, Socket } from 'socket.io-client';
 import LINK from '../store/Link';
 import Loader from '../components/Loader';
 import useAuth from '../store/Auth';
-import TOKENNAME from '../store/Token';
 
 const Chatroom = () => {
-    const navigate = useNavigate();
     const chatEndRef = useRef<HTMLDivElement | null>(null);
-    const currToken = localStorage.getItem(TOKENNAME);
+    const navigate = useNavigate();
+    const {isLoggedIn} = useAuth();
     
     useEffect(() => {
-        if (!currToken) {
+        if (!isLoggedIn) {
             navigate("/login"); 
         }
-    }, [currToken]);
+    }, [isLoggedIn]);
 
     type ChatroomType = {
         _id: string;

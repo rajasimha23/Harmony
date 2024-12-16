@@ -1,26 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputEntry from "../components/InputEntry";
 import {useAuth} from "../store/Auth"
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import LINK from "../store/Link";
 import Loader from "../components/Loader";
-import InputEntryPassword from "../components/InputEntryPassword"
-import TOKENNAME from "../store/Token";
+import InputEntryPassword from "../components/InputEntryPassword";
 
 function Login() {
     const navigate = useNavigate();
-    const currToken = localStorage.getItem(TOKENNAME);
-    const [user,setUser] = useState({email: "", password: ""});
-    const {storeTokenInLS} = useAuth();
-
-    const [isLoading, setLoading] = useState(false);
+    const {isLoggedIn} = useAuth();
     
-    React.useEffect(() => {
-        if (currToken) {
+    useEffect(() => {
+        if (isLoggedIn) {
             navigate("/home"); 
         }
-    }, [currToken, navigate]);
+    }, [isLoggedIn]);
+    
+    const [isLoading, setLoading] = useState(false);
+    const [user,setUser] = useState({email: "", password: ""});
+    const {storeTokenInLS} = useAuth();
 
     function updateUser(event: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
@@ -57,7 +56,7 @@ function Login() {
 
     return <> {isLoading ? <Loader /> :
         <div className="w-full h-90vh flex flex-col justify-center items-center">
-            {(currToken == null) && (<>
+            {(isLoggedIn == false) && (<>
             <h1 className="mb-6 text-5xl text-center">Welcome To Login Page</h1>
             <InputEntry changeFunction={updateUser} name="email" text="Email" placeholder="Enter Your Email" />
             <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Enter Your Password" />
