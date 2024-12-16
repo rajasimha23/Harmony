@@ -12,8 +12,8 @@ function Register() {
     const {isLoggedIn} = useAuth();
     
     useEffect(() => {
-        if (!isLoggedIn) {
-            navigate("/login"); 
+        if (isLoggedIn) {
+            navigate("/home"); 
         }
     }, [isLoggedIn]);
     
