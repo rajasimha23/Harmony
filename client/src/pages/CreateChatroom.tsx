@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import InputEntry from "../components/InputEntry"
 import useAuth from "../store/Auth";
 import LINK from "../store/Link";
@@ -9,7 +9,15 @@ const CreateChatroom = () => {
 
     const [roomName, setRoomName] = useState("");
     const {user, lastPage} = useAuth();
+    
     const navigate = useNavigate();
+    const {isLoggedIn} = useAuth();
+    
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/login"); 
+        }
+    }, [isLoggedIn]);
 
     interface RespType{
         message:string

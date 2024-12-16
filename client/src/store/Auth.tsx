@@ -29,6 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isLoading, setLoading] = React.useState(false);
     const[token, setToken] = React.useState(localStorage.getItem(TOKENNAME));
     const [lastPage, setLastPage] = useState("/home");
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [user, setUser] = React.useState<UserType>({
         email: "",
         isAdmin: false,
@@ -43,10 +44,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return localStorage.setItem(TOKENNAME, serverToken);
     };
 
-    let isLoggedIn = !!token;
-
     const LogoutUser = () => {
         setToken("");
+        setLoggedIn(false);
         return localStorage.removeItem(TOKENNAME);
     };
 
@@ -64,6 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const data = await response.json();
                 const userData = data.message;
                 setUser(userData);
+                setLoggedIn(true);
             }
         }
         catch (err) {

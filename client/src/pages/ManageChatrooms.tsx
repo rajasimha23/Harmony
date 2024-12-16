@@ -1,8 +1,7 @@
-import React, { useState, useEffect} from "react";
+import { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../store/Auth";
 import Loader from "../components/Loader";
-import TOKENNAME from "../store/Token";
 import LINK from "../store/Link";
 import {toast} from "react-toastify";
 import ChatroomRow from "../components/ChatroomRow";
@@ -11,7 +10,13 @@ import { UserType } from "../store/Auth";
 
 function ManageChatrooms() {
     const navigate = useNavigate();
-    const currToken = localStorage.getItem(TOKENNAME);
+    const {isLoggedIn} = useAuth();
+    
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/login"); 
+        }
+    }, [isLoggedIn]);
 
     
     const {user, setLastPage}:{user:UserType, setLastPage:(x:string)=>void} = useAuth();
@@ -19,14 +24,11 @@ function ManageChatrooms() {
     const [chatrooms, setChatrooms] = useState([]);
     const [deleteConfirmation, setDeleteConfirmation] = useState(false);
     const [selectedChatroomId, setChatroomId] = useState(0);
-    React.useEffect(() => {
-        if (!currToken) {
-            navigate("/login"); 
-        }
+    useEffect(() => {
         if (!user.isAdmin) {
             navigate("/home");
         }
-    }, [currToken]);
+    }, []);
 
     type CardType = {
         chatroomUserId:number,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputEntry from "../components/InputEntry";
 import useAuth from "../store/Auth";
 import {useNavigate} from "react-router-dom";
@@ -6,20 +6,20 @@ import {toast} from "react-toastify";
 import LINK from "../store/Link";
 import InputEntryPassword from "../components/InputEntryPassword";
 import Loader from "../components/Loader";
-import TOKENNAME from "../store/Token";
 
 function Register() {
     const navigate = useNavigate();
-    const currToken = localStorage.getItem(TOKENNAME);
+    const {isLoggedIn} = useAuth();
+    
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/login"); 
+        }
+    }, [isLoggedIn]);
+    
     const {storeTokenInLS}  = useAuth();
     const [user,setUser] = useState({username: "", email: "", password: "", confirmPassword: "", match: true});
     const [isLoading, setLoading] = useState(false);
-
-    React.useEffect(() => {
-        if (currToken) {
-            navigate("/home"); 
-        }
-    }, [currToken, navigate]);
 
     function updateUser(event: React.ChangeEvent<HTMLElement>) {
         const { name, value } = event.target as HTMLInputElement;
@@ -57,7 +57,7 @@ function Register() {
     }
 
     return <> {isLoading ?  <Loader />: <>
-        {currToken == null && (<>
+        {isLoggedIn == false && (<>
         <div className="w-full h-90vh flex flex-col justify-center items-center text-center">
             <h1 className="text-5xl mb-6">Welcome To Register Page</h1>
             <InputEntry changeFunction={updateUser} name="username" text="Username" placeholder="Enter Your Name" value={user.username} /> 

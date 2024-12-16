@@ -1,8 +1,7 @@
-import React, { useState, useEffect} from "react";
+import { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../store/Auth";
 import Loader from "../components/Loader";
-import TOKENNAME from "../store/Token";
 import LINK from "../store/Link";
 import ChatroomCard from "../components/ChatroomCard";
 import {toast} from "react-toastify";
@@ -10,13 +9,13 @@ import { UserType } from "../store/Auth";
 
 function Home() {
     const navigate = useNavigate();
-    const currToken = localStorage.getItem(TOKENNAME);
-
-    React.useEffect(() => {
-        if (!currToken) {
+    const {isLoggedIn} = useAuth();
+    
+    useEffect(() => {
+        if (!isLoggedIn) {
             navigate("/login"); 
         }
-    }, [currToken]);
+    }, [isLoggedIn]);
     
     const {user, setLastPage}:{user:UserType, setLastPage:(x:string)=>void} = useAuth();
     const [isLoading, setLoading] = useState(true);
