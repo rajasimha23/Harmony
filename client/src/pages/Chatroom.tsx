@@ -1,10 +1,11 @@
 
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
 import LINK from '../store/Link';
 import Loader from '../components/Loader';
 import useAuth from '../store/Auth';
+import { Send } from 'lucide-react';
 
 const Chatroom = () => {
     const chatEndRef = useRef<HTMLDivElement | null>(null);
@@ -153,16 +154,16 @@ const Chatroom = () => {
     return (
         <>
             <div className="flex flex-col justify-center items-center w-screen h-[90vh]">
-                <h1 className='text-5xl text-black text-center mb-8'>{chatroomData.chatroomName}</h1>
-                <div className='w-5/12'>
-                    <div className="bg-[#c7c7c7] chat-window h-[calc(90vh-200px)] overflow-y-auto p-8 rounded-xl flex flex-col justify-start items-start">
+                <h1 className="text-5xl text-black font-extrabold text-center mb-8">{chatroomData.chatroomName}</h1>
+                <div className="w-5/12">
+                    <div className="bg-[#c7c7c7] chat-window h-[calc(90vh-200px)] overflow-y-auto p-8 rounded-t-xl flex flex-col justify-start items-start scrollbar-rounded shadow-2xl">
                         {messages.map((msg, index) => {
                             const currentMessageDate = new Date(msg.timestamp);
                             const previousMessageDate = index > 0 ? new Date(messages[index - 1].timestamp) : null;
                             const isNewDay = !previousMessageDate || currentMessageDate.toDateString() !== previousMessageDate.toDateString();
 
                             return (
-                                <>
+                                <React.Fragment key={index}>
                                     {isNewDay && (
                                         <div key={`date-${index}`} className="w-full text-center my-4">
                                             <span className="bg-[#c7c7c7] text-black py-2 px-4 rounded-lg">
@@ -170,36 +171,46 @@ const Chatroom = () => {
                                             </span>
                                         </div>
                                     )}
-                                    {(msg.username === user.username) ? (
-                                        <div key={index} className='bg-[#319b48] mb-3 py-2 px-2 rounded-xl max-w-md break-words self-end'>
-                                            <strong>{"You"}</strong><br />{msg.message}<br />
-                                            <p className='text-right text-xs'>{returnDisplayTime(msg.timestamp)}</p>
+                                    {msg.username === user.username ? (
+                                        <div className="bg-blue-600 mb-3 py-2 px-2 rounded-xl max-w-md break-words self-end">
+                                            <strong className="text-gray-200">{"You"}</strong>
+                                            <br />
+                                            <p className="text-white">{msg.message}</p>
+                                            <p className="text-right text-xs text-gray-200">{returnDisplayTime(msg.timestamp)}</p>
                                         </div>
                                     ) : (
-                                        <div key={index} className='bg-[#319b48] mb-3 py-2 px-2 rounded-xl max-w-md break-words'>
-                                            <strong>{msg.username}</strong><br />{msg.message}<br />
-                                            <p className='text-right text-xs'>{returnDisplayTime(msg.timestamp)}</p>
+                                        <div className="bg-blue-600 mb-3 py-2 px-2 rounded-xl max-w-md break-words">
+                                            <strong className="text-gray-200">{msg.username}</strong>
+                                            <br />
+                                            <p className="text-white">{msg.message}</p>
+                                            <p className="text-right text-xs text-gray-200">{returnDisplayTime(msg.timestamp)}</p>
                                         </div>
                                     )}
-                                </>
+                                </React.Fragment>
                             );
                         })}
                         <div ref={chatEndRef}></div>
                     </div>
-                    <div className="chat-input mt-3">
+                    <div className="flex w-full">
                         <input
-                            className='w-10/12 h-10 rounded-lg px-3'
+                            className="w-full h-12 px-3 rounded-bl-xl border-0"
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             placeholder="Type your message"
                         />
-                        <button onClick={sendMessage} className='bg-[#707070] w-20 h-11 text-white rounded-xl text-md text-center ml-2'>{"Send"}</button>
+                        <button 
+                            onClick={sendMessage}
+                            className="bg-blue-600 hover:bg-blue-400 text-white p-3 rounded-br-xl transition-colors duration-200"
+                        >
+                            <Send className="w-5 h-5" />
+                        </button>
                     </div>
                 </div>
             </div>
         </>
     );
 };
+
 
 export default Chatroom;

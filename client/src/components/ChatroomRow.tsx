@@ -26,18 +26,17 @@ const ChatroomRow = (props:CardType) => {
                 <div className="mr-3">
                     { (!user.isAdmin) ? (null) : (<div className="flex justify-center items-center">
                         <FaTrashAlt
-                            className="text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                            className="text-black text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 cursor-pointer"
                             onClick={() => {props.setChatroomMethod(props.chatroomId); props.deleteHandler()}}
                         />
                     </div>)}
                 </div>
-                <h1 className='text-2xl text-white w-6/12 text-left cursor-pointer' onClick={()=>{navigate(`/chatroom/${props.chatroomId}`)}}>{props.chatroomName}</h1>
-                <h2 className="text-2xl text-white w-3/12 text-left">{props.creatorUsername}</h2>
-                <h2 className="text-2xl text-white w-3/12 text-left">{formattedDate}</h2>
+                <h1 className='text-2xl text-black w-6/12 text-left cursor-pointer' onClick={()=>{navigate(`/chatroom/${props.chatroomId}`)}}>{props.chatroomName}</h1>
+                <h2 className="text-2xl text-black w-3/12 text-left">{props.creatorUsername}</h2>
+                <h2 className="text-2xl text-black w-3/12 text-left">{formattedDate}</h2>
             </div>
         </>
     )
 }
 
 export default ChatroomRow;
-
