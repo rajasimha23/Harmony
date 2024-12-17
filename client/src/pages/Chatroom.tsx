@@ -153,7 +153,7 @@ const Chatroom = () => {
     return (
         <>
             <div className="flex flex-col justify-center items-center w-screen h-[90vh]">
-                <h1 className='text-5xl text-white text-center mb-8'>{chatroomData.chatroomName}</h1>
+                <h1 className='text-5xl text-black text-center mb-8'>{chatroomData.chatroomName}</h1>
                 <div className='w-5/12'>
                     <div className="bg-[#c7c7c7] chat-window h-[calc(90vh-200px)] overflow-y-auto p-8 rounded-xl flex flex-col justify-start items-start">
                         {messages.map((msg, index) => {

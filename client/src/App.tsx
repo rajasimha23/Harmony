@@ -21,7 +21,7 @@ function App() {
           <Route path='/logout' element={<><Header /><Logout /></>} />
           <Route path='/createChatroom' element={<><Header /><CreateChatroom /></>} />
           <Route path='/manage' element={<><Header /><ManageChatrooms /></>} />
-          <Route path="/chatroom/:chatroomId" element={<><Header /><Chatroom /></>} />
+          <Route path="/chatroom/:chatroomId" element={<><AddHeader /><Chatroom /></>} />
         </Routes>
       </BrowserRouter>
     </>

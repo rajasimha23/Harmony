@@ -15,7 +15,19 @@ html {
 
 body {
   /* background-color: #242424; */
-  background-color: white;
+  background-color: text-white;
+  background-image: url("bg4.jpg");
+  background-size: 100%; /* Zooms out by increasing the size to 150% of the container */
+  background-repeat: no-repeat; /* Prevents the background from tiling */
+  background-position: center;
+}
+
+.customHeader {
+  background-color: text-white;
+  background-image: url("bg6.jpg");
+  background-size: 100%; /* Zooms out by increasing the size to 150% of the container */
+  background-repeat: no-repeat; /* Prevents the background from tiling */
+  background-position: center;
 }
 
 /* h1,h2,h3,h4,h5,h6,p{

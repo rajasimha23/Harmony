@@ -1,6 +1,6 @@
 function DummyHeader () {
 
-    return <header className="bg-header py-4">
+    return <header className="customHeader py-4">
         <div className="mx-3 md:mx-7 flex flex-row justify-between items-center">
             <button>
                 <div className="flex my-0.5">

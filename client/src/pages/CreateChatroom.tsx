@@ -43,8 +43,10 @@ const CreateChatroom = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full h-90vh text-center">
-        <InputEntry changeFunction={(e)=>setRoomName(e.target.value)} name="chatroomName" text="Chatroom Name" placeholder="Enter Chatroom Name" value={roomName} /> 
-        <button onClick={createFunction} className="customButton">Create</button>
+        <div className="bg-credbg rounded-3xl overflow-hidden shadow-3xl px-16 py-12">
+            <InputEntry changeFunction={(e)=>setRoomName(e.target.value)} name="chatroomName" text="Chatroom Name" placeholder="Enter Chatroom Name" value={roomName} /> 
+            <button onClick={createFunction} className="bg-blue-600 px-5 py-2 rounded-lg text-white hover:bg-blue-400">Create</button>
+        </div>
     </div>
   )
 }
