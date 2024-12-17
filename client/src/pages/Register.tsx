@@ -34,7 +34,10 @@ function Register() {
     }
 
     async function storeData() {
-        if (!user.match) return;
+        if (!user.match) {
+            toast("Passwords Do Not Match");
+            return;
+        }
         setLoading(true);
         const response = await fetch(LINK + "api/auth/register", {
             method: "POST",
@@ -56,23 +59,24 @@ function Register() {
         }
     }
 
-    return <> {isLoading ?  <Loader />: <>
-        {isLoggedIn == false && (<>
-        <div className="w-full h-90vh flex flex-col justify-center items-center text-center">
-            <h1 className="text-5xl mb-6">Welcome To Register Page</h1>
-            <InputEntry changeFunction={updateUser} name="username" text="Username" placeholder="Enter Your Name" value={user.username} /> 
-            <InputEntry changeFunction={updateUser} name="email" text="Email" placeholder="Enter Your Email" value={user.email} />
-            <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Enter Your Password" value={user.password} />
-            <InputEntryPassword changeFunction={updateUser} name="confirmPassword" text="Confirm Password" placeholder="Re-Enter Your Password" value={user.confirmPassword} />
-            <button type="submit" className="w-32 h-12 customButton" onClick={storeData}>Submit</button>
-            {(!user.match) ? <h3 className="mt-3 text-xl text-red-400">Passwords Do Not Match</h3> : null}
+    if (isLoading) return <Loader />;
 
-            <h2 className="text-3xl mt-7 mb-4">Already have an Account?</h2>
-            <button className="customButton h-12 w-32" onClick={()=>navigate("/login")}>Login</button>
+    return <div className="w-full h-90vh flex items-center justify-center">
+        <div className="flex bg-credbg rounded-3xl overflow-hidden shadow-2xl">
+            <img src="Group3.png" style={{ width: "35rem", height: "auto", objectFit: "contain" }} />
+            <div className="flex flex-col justify-center items-center text-center mx-20">
+                <img src="logo.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }} />
+                <h1 className="text-5xl mb-10 text-black">Harmony</h1>
+                <InputEntry changeFunction={updateUser} name="username" text="Username" placeholder="Username" value={user.username} /> 
+                <InputEntry changeFunction={updateUser} name="email" text="Email" placeholder="Email" value={user.email} />
+                <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Password" value={user.password} />
+                <InputEntryPassword changeFunction={updateUser} name="confirmPassword" text="Confirm Password" placeholder="Confirm Password" value={user.confirmPassword} />
+                <button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white rounded-lg py-2 px-4 mt-3 shadow-lg" onClick={storeData}>Sign up</button>
+
+                <h2 className="text-lg mt-5 text-black">Already have an Account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/login")}>Log in</span></h2>
+            </div>
         </div>
-        </>)}
-        </>}
-    </>
+    </div>
 }   
 
 export default Register;

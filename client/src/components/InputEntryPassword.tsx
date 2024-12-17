@@ -37,14 +37,14 @@ function InputEntryPassword(props: InputEntryFormat) {
     };
 
     return (
-        <div className="text-center relative">
-            <label className="text-xl text-[#ffffffde]" htmlFor={props.name}>{props.text}</label><br />
+        <div className="text-center relative mb-4 shadow-md">
+            {/* <label className="text-xl text-[#ffffffde]" htmlFor={props.name}>{props.text}</label><br /> */}
             
             <div className="relative">
                 <input
                     onChange={props.changeFunction}
                     type={showPassword ? "text" : "password"} 
-                    className="px-3 py-1 rounded-lg mb-3 mt-3 w-64 h-10 text-center bg-[#2d2d2d] text-[#ffffffde]"
+                    className="px-3 py-1 rounded-lg w-64 h-10 text-left bg-inputColour text-black placeholder-black"
                     id={props.name}
                     name={props.name}
                     placeholder={props.placeholder}
@@ -55,12 +55,11 @@ function InputEntryPassword(props: InputEntryFormat) {
                 <button
                     type="button"
                     onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-[33px] transform -translate-y-1/2 text-[#ffffffde] text-xl"
+                    className="absolute right-3 top-[20px] transform -translate-y-1/2 text-[#8a8a8a] text-md"
                 >
                     {!showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
             </div>
-            <br />
         </div>
     );
 }

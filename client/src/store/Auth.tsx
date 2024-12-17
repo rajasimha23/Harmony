@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import LINK from "./Link";
 import Loader from "../components/Loader";
-import DummyHeader from "../components/DummyHeader";
 import TOKENNAME from "./Token";
+import DummyHeader from "../components/headers/DummyHeader";
 
 export type UserType = {
     email:string,
