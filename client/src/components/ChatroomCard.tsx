@@ -71,9 +71,27 @@ const ChatroomCard = (props:CardType) => {
     const options:Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
     const formattedDate = unformattedDate.toLocaleDateString('en-US', options);
 
+    // return (
+    //     <div
+    //         className="bg-[#b1b1b1] rounded-xl py-6 px-4 group text-center mx-3 my-3 cursor-pointer shadow-4xl"
+    //         onClick={() => navigate(`/chatroom/${props.chatroomId}`)}
+    //     >
+    //         <h1
+    //             className="text-3xl text-black mb-5 cursor-pointer"
+    //             onClick={(e) => {
+    //                 e.stopPropagation(); 
+    //                 navigate(`/chatroom/${props.chatroomId}`);
+    //             }}
+    //         >
+    //             {props.chatroomName}
+    //         </h1>
+    //         <h2 className="text-xl text-black mb-2">Creator: {props.creatorUsername}</h2>
+    //         <h2>{formattedDate}</h2>
+    //     </div>
+    // );
     return (
         <div
-            className="bg-[#b1b1b1] rounded-xl py-6 px-4 group text-center mx-3 my-3 cursor-pointer shadow-4xl"
+            className="bg-[#b1b1b1] rounded-xl py-6 px-4 group text-center mx-3 my-3 cursor-pointer shadow-4xl transition-transform duration-300 hover:scale-110 hover:shadow-5xl"
             onClick={() => navigate(`/chatroom/${props.chatroomId}`)}
         >
             <h1

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
-import InputEntry from "../components/InputEntry"
 import useAuth from "../store/Auth";
 import LINK from "../store/Link";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { MessageSquarePlus } from "lucide-react";
 
 const CreateChatroom = () => {
 
@@ -44,11 +44,19 @@ const CreateChatroom = () => {
   return (
     <div className="flex flex-col justify-center items-center w-full h-90vh text-center">
         <div className="bg-credbg rounded-3xl overflow-hidden shadow-3xl px-16 py-12">
-            <InputEntry changeFunction={(e)=>setRoomName(e.target.value)} name="chatroomName" text="Chatroom Name" placeholder="Enter Chatroom Name" value={roomName} /> 
-            <button onClick={createFunction} className="bg-blue-600 px-5 py-2 rounded-lg text-white hover:bg-blue-400">Create</button>
+            <h1 className="text-left text-3xl mb-3 font-extrabold">Start a New Chatroom</h1>
+            <input type="text" className="px-3 py-1 rounded-lg w-full h-10 text-center bg-inputColour text-black placeholder-black mb-3"
+                name="chatroomName" placeholder="Enter Room Name" value={roomName} autoComplete="on" required onChange={(e)=>setRoomName(e.target.value)}/>
+            <br />
+            <button onClick={createFunction} disabled={!roomName.trim()}
+                    className="w-full bg-blue-600 px-5 py-3 rounded-lg text-white font-semibold hover:bg-blue-400 transition-colors duration-200 flex items-center justify-center cursor-pointer">
+                    <MessageSquarePlus className="w-5 h-5 mr-2" />
+                    Create Chatroom
+            </button>
         </div>
     </div>
   )
 }
 
 export default CreateChatroom
+
