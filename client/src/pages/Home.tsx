@@ -17,7 +17,7 @@ function Home() {
     }, [isLoggedIn]);
     
     const {user, setLastPage}:{user:UserType, setLastPage:(x:string)=>void} = useAuth();
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
     const [chatrooms, setChatrooms] = useState([]);
 
     type CardType = {
