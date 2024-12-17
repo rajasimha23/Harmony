@@ -60,8 +60,22 @@ function ManageChatrooms() {
                 })
             });
             if (response.ok) {
-                toast("Successfully Deleted Chatroom");
+                const response2 = await fetch(LINK + "api/chat/deleteChatroomChats", {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        chatroomId:selectedChatroomId,
+                        userId: user.userId
+                    })
+                })
                 fetchChatrooms();
+
+                if (!response2.ok) {
+                    const rest2_data = await response2.json();
+                    toast(rest2_data.message);
+                }
             }
             else {
                 const res_data = await response.json();
@@ -118,13 +132,15 @@ function ManageChatrooms() {
 
     return <>
         {deleteConfirmation? 
-            (<div className="mx-5"><div className="flex flex-col justify-center items-center w-full h-90vh">
-                <h1 className="text-5xl text-center">Do You Really Want to Delete this Chatroom?</h1><br />
-                <div>
-                    <button className="w-32 h-12 mx-2 px-6 bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-400" onClick={()=>{setDeleteConfirmation(false)}}><h6 className="text-xl">Cancel</h6></button>
-                    <button className="w-32 h-12 mx-2 px-6 bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-400" onClick={confirmDeleteChatroom}><h6 className="text-xl">Yes</h6></button>
+            (<div className="w-full h-90vh flex flex-col justify-center items-center">
+                <div className="bg-credbg mx-5 rounded-3xl overflow-hidden shadow-3xl px-10 py-8 flex flex-col justify-center items-center">
+                    <h1 className="text-4xl text-center">Delete this Chatroom?</h1><br />
+                    <div>
+                        <button className="w-32 h-12 mx-2 px-6 bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-400" onClick={()=>{setDeleteConfirmation(false)}}><h6 className="text-xl">Cancel</h6></button>
+                        <button className="w-32 h-12 mx-2 px-6 bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-400" onClick={confirmDeleteChatroom}><h6 className="text-xl">Yes</h6></button>
+                    </div>
                 </div>
-            </div></div>): (
+            </div>): (
             <div className="mx-5">
                 <div className="flex flex-col justify-start items-center w-full h-90vh">
                     <h1 className="text-4xl md:text-5xl text-center font-extrabold mt-20 mb-10">Manage Chatrooms</h1> 

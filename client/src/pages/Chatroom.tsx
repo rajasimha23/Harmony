@@ -192,11 +192,30 @@ const Chatroom = () => {
                         <div ref={chatEndRef}></div>
                     </div>
                     <div className="flex w-full">
-                        <input
+                        {/* <input
                             className="w-full h-12 px-3 rounded-bl-xl border-0"
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
+                            placeholder="Type your message"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault(); 
+                                    sendMessage();
+                                }
+                            }}
+                        /> */}
+                        <textarea
+                            className="w-full h-12 px-3 rounded-bl-xl border-0 resize-none"
+                            rows={1} // Optional: Adjust the initial size
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault(); // Prevent newline on Enter without Shift
+                                    sendMessage(); // Send the message
+                                }
+                            }}
                             placeholder="Type your message"
                         />
                         <button 
