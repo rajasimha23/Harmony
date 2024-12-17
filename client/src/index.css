@@ -17,7 +17,7 @@ body {
   /* background-color: #242424; */
   background-color: text-white;
   background-image: url("/bg4.jpg");
-  background-size: 100%; /* Zooms out by increasing the size to 150% of the container */
+  background-size: cover; /* Zooms out by increasing the size to 150% of the container */
   background-repeat: no-repeat; /* Prevents the background from tiling */
   background-position: center;
 }
