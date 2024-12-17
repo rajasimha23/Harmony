@@ -6,7 +6,7 @@ const validateChatroom = (schema) => async (req, res, next) => {
     }
     catch (err) {
         const status = 404;
-        const message = "Fill the input properly";
+        const message = "Fill the inpuet properly";
         const extraDetails = err.errors[0].message;
         const errorDetails = {
             message,

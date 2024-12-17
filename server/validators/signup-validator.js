@@ -15,9 +15,7 @@ const signupSchema = z.object({
     password: z.string({required_error: "Password is Required"})
     .trim()
     .min(6, {message: "Password should be more than 6 Characters" })
-    .max(20, {message: "Password should be less than 20 Characters" }),
-
-    isAdmin: z.boolean({required_error: "isAdmin is Required"})
+    .max(20, {message: "Password should be less than 20 Characters" })
 });
 
 export default signupSchema;
