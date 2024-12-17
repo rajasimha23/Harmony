@@ -44,7 +44,7 @@ const CreateChatroom = () => {
   return (
     <div className="flex flex-col justify-center items-center w-full h-90vh text-center">
         <div className="bg-credbg rounded-3xl overflow-hidden shadow-3xl px-16 py-12">
-            <h1 className="text-left text-3xl mb-3 font-extrabold">Start a New Chatroom</h1>
+            <h1 className="text-left text-3xl mb-3 font-bold">Start a New Chatroom</h1>
             <input type="text" className="px-3 py-1 rounded-lg w-full h-10 text-center bg-inputColour text-black placeholder-black mb-3"
                 name="chatroomName" placeholder="Enter Room Name" value={roomName} autoComplete="on" required onChange={(e)=>setRoomName(e.target.value)}/>
             <br />
