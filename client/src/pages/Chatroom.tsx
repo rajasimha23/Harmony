@@ -192,32 +192,20 @@ const Chatroom = () => {
                         <div ref={chatEndRef}></div>
                     </div>
                     <div className="flex w-full">
-                        {/* <input
-                            className="w-full h-12 px-3 rounded-bl-xl border-0"
-                            type="text"
-                            value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder="Type your message"
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" && !e.shiftKey) {
-                                    e.preventDefault(); 
-                                    sendMessage();
-                                }
-                            }}
-                        /> */}
                         <textarea
-                            className="w-full h-12 px-3 rounded-bl-xl border-0 resize-none"
-                            rows={1} // Optional: Adjust the initial size
+                            className="w-full h-12 px-3 rounded-bl-xl border-0 resize-none flex items-center pt-2"
+                            rows={1}
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyDown={(e) => {
                                 if (e.key === "Enter" && !e.shiftKey) {
-                                    e.preventDefault(); // Prevent newline on Enter without Shift
-                                    sendMessage(); // Send the message
+                                    e.preventDefault();
+                                    sendMessage();
                                 }
                             }}
                             placeholder="Type your message"
                         />
+
                         <button 
                             onClick={sendMessage}
                             className="bg-blue-600 hover:bg-blue-400 text-white p-3 rounded-br-xl transition-colors duration-200"
