@@ -114,38 +114,33 @@ function ManageChatrooms() {
         setLastPage("/manage");
     },[])
 
+    if (isLoading) return <Loader />;
+
     return <>
-        {isLoading ? <Loader /> : 
-            <>
-                {deleteConfirmation? 
-                    (<div className="mx-5"><div className="flex flex-col justify-center items-center w-full h-90vh">
-                        <h1 className="text-5xl text-center">Do You Really Want to Delete this Chatroom?</h1><br />
-                        <div>
-                            <button className="w-32 h-12 mx-2 customButton" onClick={()=>{setDeleteConfirmation(false)}}><h6 className="text-xl">Cancel</h6></button>
-                            <button className="w-32 h-12 mx-2 customButton" onClick={confirmDeleteChatroom}><h6 className="text-xl">Yes</h6></button>
+        {deleteConfirmation? 
+            (<div className="mx-5"><div className="flex flex-col justify-center items-center w-full h-90vh">
+                <h1 className="text-5xl text-center">Do You Really Want to Delete this Chatroom?</h1><br />
+                <div>
+                    <button className="w-32 h-12 mx-2 px-6 bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-400" onClick={()=>{setDeleteConfirmation(false)}}><h6 className="text-xl">Cancel</h6></button>
+                    <button className="w-32 h-12 mx-2 px-6 bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-400" onClick={confirmDeleteChatroom}><h6 className="text-xl">Yes</h6></button>
+                </div>
+            </div></div>): (
+            <div className="mx-5">
+                <div className="flex flex-col justify-start items-center w-full h-90vh">
+                    <h1 className="text-4xl md:text-5xl text-center font-extrabold mt-20 mb-10">Manage Chatrooms</h1> 
+                    
+                    <div className="bg-credbg flex flex-col md:w-7/12 rounded-2xl overflow-hidden shadow-3xl">
+                        <div className="bg-[#cfcfcf] py-6 px-4 group flex flex-row items-center">
+                            <FaTrashAlt className=" text-xl opacity-0 group-hover:opacity-0 transition-opacity duration-500 mr-3"/>
+                            <h1 className='text-2xl w-6/12 text-left text-black'>Chatroom</h1>
+                            <h2 className="text-2xl w-3/12 text-left text-black">Creator</h2>
+                            <h2 className="text-2xl w-3/12 text-left text-black">Created</h2>
                         </div>
-                    </div></div>): (
-                    <div className="mx-5">
-                        <div className="flex flex-col justify-center items-center w-full h-90vh">
-                            <h1 className="mb-5 text-4xl md:text-5xl text-center">Welcome, {user.username}</h1> 
-                            
-                            <div className="bg-[#5c5c5c] flex flex-col md:w-7/12">
-                                <div className="bg-[#707070] py-6 px-4 group flex flex-row items-center">
-                                    <FaTrashAlt className="text-white text-xl opacity-0 group-hover:opacity-0 transition-opacity duration-500 mr-3"/>
-                                    <h1 className='text-2xl text-white w-6/12 text-left'>Chatroom</h1>
-                                    <h2 className="text-2xl text-white w-3/12 text-left">Creator</h2>
-                                    <h2 className="text-2xl text-white w-3/12 text-left">Created</h2>
-                                </div>
-                                {chatrooms.map(createChatroomRows)}
-                            </div>
-                            
-                            {(!user.isAdmin)?(null):(
-                                <button className="customButton mt-5" onClick={()=>{navigate("/createChatroom")}}>Add Chatroom</button>
-                            )}
-                        </div>
-                    </div>)
-                }
-            </>
+                        {chatrooms.map(createChatroomRows)}
+                    </div>
+
+                </div>
+            </div>)
         }
     </>
 }   
