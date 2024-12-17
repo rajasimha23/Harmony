@@ -69,12 +69,14 @@ function Home() {
 
     if (isLoading) return <Loader />;
 
-    return <div className="mx-5 w-full h-80vh">
-        <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-16">Welcome {user.username}!</h1>
-        <div className="flex flex-col justify-center items-center w-full">
-            <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-10">Chatrooms</h1>
-            <div className="flex flex-row justify-center items-center">
-                {chatrooms.map(createChatroomCards)}
+    return <div className="w-full">
+        <div className="mx-5 h-80vh">
+            <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-16">Welcome {user.username}!</h1>
+            <div className="flex flex-col justify-center items-center w-full">
+                <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-10">Chatrooms</h1>
+                <div className="flex flex-row justify-center items-center">
+                    {chatrooms.map(createChatroomCards)}
+                </div>
             </div>
         </div>
     </div>
