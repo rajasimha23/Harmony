@@ -10,25 +10,24 @@ import { UserType } from "../store/Auth";
 
 function ManageChatrooms() {
     const navigate = useNavigate();
-    const {isLoggedIn} = useAuth();
+    const {user, setLastPage,isLoggedIn}:{user:UserType, setLastPage:(x:string)=>void, isLoggedIn:boolean} = useAuth();
     
     useEffect(() => {
+        console.log(isLoggedIn);
+        console.log(user);
         if (!isLoggedIn) {
             navigate("/login"); 
+        } 
+        else if (isLoggedIn && !user.isAdmin) {
+            navigate("/home");
         }
     }, [isLoggedIn]);
 
     
-    const {user, setLastPage}:{user:UserType, setLastPage:(x:string)=>void} = useAuth();
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
     const [deleteConfirmation, setDeleteConfirmation] = useState(false);
     const [selectedChatroomId, setChatroomId] = useState(0);
-    useEffect(() => {
-        if (!user.isAdmin) {
-            navigate("/home");
-        }
-    }, []);
 
     type CardType = {
         chatroomUserId:number,
@@ -141,8 +140,8 @@ function ManageChatrooms() {
                     </div>
                 </div>
             </div>): (
-            <div className="mx-5">
-                <div className="flex flex-col justify-start items-center w-full h-90vh">
+            <div className="w-full h-80vh">
+                <div className="flex flex-col justify-start items-center mx-5 mb-5">
                     <h1 className="text-4xl md:text-5xl text-center font-extrabold mt-20 mb-10">Manage Chatrooms</h1> 
                     
                     <div className="bg-credbg flex flex-col md:w-7/12 rounded-2xl overflow-hidden shadow-3xl">

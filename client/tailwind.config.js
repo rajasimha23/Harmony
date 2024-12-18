@@ -9,7 +9,8 @@ export default {
       'sans': ['ui-sans-serif', 'system-ui'],
       'serif': ['ui-serif', 'Georgia'],
       'mono': ['ui-monospace', 'SFMono-Regular'],
-      'logo': ['Oswald'],
+      // 'logo': ['Poetsen One'],
+      'logo': ['Inter']
     },
     extend: {
       height: {

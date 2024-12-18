@@ -27,10 +27,10 @@ export const AuthContext = React.createContext<AuthContextType|null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isLoading, setLoading] = React.useState(false);
-    const[token, setToken] = React.useState(localStorage.getItem(TOKENNAME));
+    const [token, setToken] = React.useState(localStorage.getItem(TOKENNAME));
     const [lastPage, setLastPage] = useState("/home");
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-    const [user, setUser] = React.useState<UserType>({
+    const [user, setUser] = useState<UserType>({
         email: "",
         isAdmin: false,
         joinedOn: new Date(),

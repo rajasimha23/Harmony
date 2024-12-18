@@ -51,7 +51,7 @@ function Header () {
                 <button onClick={() => { navigate("/") }}>
                     <div className="flex ml-2">
                         <img src="logo.png" style={{ width: "2.5rem", height: "auto", objectFit: "contain" }} className="mr-3" />
-                        <h1 className="text-3xl sans-logo">Harmony</h1>
+                        <h1 className="text-[2.9rem] font-logo font-bold">Harmony</h1>
                     </div>
                 </button>
                 <div className="flex justify-center">

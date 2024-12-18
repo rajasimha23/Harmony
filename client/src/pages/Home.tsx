@@ -74,7 +74,7 @@ function Home() {
             <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-16">Welcome {user.username}!</h1>
             <div className="flex flex-col justify-center items-center w-full">
                 <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-10">Chatrooms</h1>
-                <div className="flex flex-row justify-center items-center">
+                <div className="flex flex-row justify-center items-center flex-wrap">
                     {chatrooms.map(createChatroomCards)}
                 </div>
             </div>
