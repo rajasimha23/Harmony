@@ -6,18 +6,57 @@ import LINK from '../store/Link';
 import Loader from '../components/Loader';
 import useAuth from '../store/Auth';
 import { Send } from 'lucide-react';
+import { FaPenToSquare } from 'react-icons/fa6';
+import { FaTrashAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
-const Chatroom = () => {
-    const chatEndRef = useRef<HTMLDivElement | null>(null);
-    const navigate = useNavigate();
-    const {isLoggedIn} = useAuth();
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog";
+
+  const Chatroom = () => {
+      const { chatroomId } = useParams();
+      const {isLoggedIn} = useAuth();
+      const [messages, setMessages] = useState<MessageType[]>([]);
+      
+      useEffect(() => {
+          if (!isLoggedIn) {
+              navigate("/login"); 
+            }
+        }, [isLoggedIn]);
+        
+        useEffect(() => {
+            fetchChatroom();
+        fetchMessages();
+    }, [chatroomId]);
     
     useEffect(() => {
-        if (!isLoggedIn) {
-            navigate("/login"); 
-        }
-    }, [isLoggedIn]);
-
+        scrollToBottom();
+    }, [messages]);
+    
+    useEffect(() => {
+        const socketInstance = io(LINK); 
+        setSocket(socketInstance);
+  
+        socketInstance.emit('joinChatroom', chatroomId);
+  
+        socketInstance.on('receiveMessage', (message: MessageType) => {
+            setMessages((prevMessages) => [...prevMessages, message]);
+        });
+  
+        return () => {
+            socketInstance.disconnect(); 
+        };
+    }, [chatroomId]);
+    
     type ChatroomType = {
         _id: string;
         chatroomName: string;
@@ -33,9 +72,10 @@ const Chatroom = () => {
         message: string;
         timestamp: Date;
     };
-
+    
+    const chatEndRef = useRef<HTMLDivElement | null>(null);
+    const navigate = useNavigate();
     const { user } = useAuth();
-    const { chatroomId } = useParams();
     const [chatroomData, setChatroomData] = useState<ChatroomType>({
         _id: '',
         chatroomName: '',
@@ -44,70 +84,52 @@ const Chatroom = () => {
         createdAt: new Date(Date.now()),
         chatroomId: 0,
     });
-    const [messages, setMessages] = useState<MessageType[]>([]);
     const [newMessage, setNewMessage] = useState<string>('');
     const [areMessagesSet, setMessagesSet] = useState<boolean>(false);
     const [socket, setSocket] = useState<Socket | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [messageToDelete, setMessageToDelete] = useState<MessageType | null>(null);
 
-    useEffect(() => {
-        const socketInstance = io(LINK); 
-        setSocket(socketInstance);
 
-        socketInstance.emit('joinChatroom', chatroomId);
+    const fetchMessages = async () => {
+        try {
+            const response = await fetch(LINK + `api/chat/fetch`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'Application/JSON',
+                },
+                body: JSON.stringify({
+                    chatroomId: chatroomId,
+                }),
+            });
+            const data = await response.json();
+            setMessages(data.chatrooms); 
+            setMessagesSet(true);
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    };
 
-        socketInstance.on('receiveMessage', (message: MessageType) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
-        });
-
-        return () => {
-            socketInstance.disconnect(); 
-        };
-    }, [chatroomId]);
-
-    useEffect(() => {
-        const fetchChatroom = async () => {
-            try {
-                const response = await fetch(LINK + `api/chatroom/getChatroom`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'Application/JSON',
-                    },
-                    body: JSON.stringify({
-                        chatroomId: chatroomId,
-                    }),
-                });
-                const data = await response.json();
-                setChatroomData(data.chatroomInfo[0]);
-            } catch (error) {
-                console.error('Error fetching chatroom:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        const fetchMessages = async () => {
-            try {
-                const response = await fetch(LINK + `api/chat/fetch`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'Application/JSON',
-                    },
-                    body: JSON.stringify({
-                        chatroomId: chatroomId,
-                    }),
-                });
-                const data = await response.json();
-                setMessages(data.chatrooms); 
-                setMessagesSet(true);
-            } catch (error) {
-                console.error('Error fetching messages:', error);
-            }
-        };
-
-        fetchChatroom();
-        fetchMessages();
-    }, [chatroomId]);
+    const fetchChatroom = async () => {
+        try {
+            const response = await fetch(LINK + `api/chatroom/getChatroom`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'Application/JSON',
+                },
+                body: JSON.stringify({
+                    chatroomId: chatroomId,
+                }),
+            });
+            const data = await response.json();
+            setChatroomData(data.chatroomInfo[0]);
+        } catch (error) {
+            console.error('Error fetching chatroom:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const sendMessage = () => {
         if (newMessage.trim() && socket) {
@@ -125,23 +147,17 @@ const Chatroom = () => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-    if (loading) return <Loader />;
-
     function returnDisplayTime(msgDate: any): string {
         if (!areMessagesSet) return "";
         const date = (msgDate instanceof Date) ? msgDate : new Date(msgDate);
-    
+        
         return date.toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
             hour12: false,
         });
     }
-
+    
     const formatDate = (date: Date) => {
         return date.toLocaleDateString([], {
             weekday: 'long',
@@ -150,7 +166,37 @@ const Chatroom = () => {
             day: 'numeric',
         });
     };
-
+    
+    async function deleteMessage (msg:any) {
+        const data = {
+            timestamp: msg.timestamp, 
+            userId: msg.userId,
+        };
+        
+        if (msg.username != user.username && !user.isAdmin) {
+            toast("User Not authorized");
+            return;
+        }
+        
+        const response = await fetch(LINK + "api/chat/delete", {
+            method:"PATCH",
+            headers:{
+                "Content-type":"Application/JSON"
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            toast("Successfully Deleted Message");
+            fetchMessages();
+        }
+        else {
+            toast("Error Deleting Message");
+        }
+        
+    }
+    
+    if (loading) return <Loader />;
     return (
         <>
             <div className="flex flex-col justify-center items-center w-screen h-80vh">
@@ -161,7 +207,7 @@ const Chatroom = () => {
                             const currentMessageDate = new Date(msg.timestamp);
                             const previousMessageDate = index > 0 ? new Date(messages[index - 1].timestamp) : null;
                             const isNewDay = !previousMessageDate || currentMessageDate.toDateString() !== previousMessageDate.toDateString();
-
+                            
                             return (
                                 <React.Fragment key={index}>
                                     {isNewDay && (
@@ -171,21 +217,35 @@ const Chatroom = () => {
                                             </span>
                                         </div>
                                     )}
-                                    {msg.username === user.username ? (
-                                        <div className="bg-blue-600 mb-3 py-2 px-2 rounded-xl max-w-md break-words self-end">
-                                            <strong className="text-gray-200">{"You"}</strong>
-                                            <br />
-                                            <p className="text-white">{msg.message}</p>
-                                            <p className="text-right text-xs text-gray-200">{returnDisplayTime(msg.timestamp)}</p>
-                                        </div>
-                                    ) : (
-                                        <div className="bg-blue-600 mb-3 py-2 px-2 rounded-xl max-w-md break-words">
-                                            <strong className="text-gray-200">{msg.username}</strong>
-                                            <br />
-                                            <p className="text-white">{msg.message}</p>
-                                            <p className="text-right text-xs text-gray-200">{returnDisplayTime(msg.timestamp)}</p>
-                                        </div>
-                                    )}
+                                    <div className='w-full flex flex-col justify-center items-center group mb-3'>
+                                        {msg.username === user.username ? (
+                                            <div className='flex items-center justify-center self-end'>
+                                                <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 mr-3'>
+                                                    <FaPenToSquare className="mr-3 cursor-pointer text-slate-600 text-xl" />
+                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setMessageToDelete(msg);setIsDialogOpen(true)}}/>
+                                                </div>
+                                                <div className="bg-blue-600 py-2 px-2 rounded-xl max-w-md break-words">
+                                                    <strong className="text-gray-200">{"You"}</strong>
+                                                    <br />
+                                                    <p className="text-white">{msg.message}</p>
+                                                    <p className="text-right text-xs text-gray-200">{returnDisplayTime(msg.timestamp)}</p>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className='flex items-center justify-center self-start'>
+                                                <div className="bg-blue-600 py-2 px-2 rounded-xl max-w-md break-words">
+                                                    <strong className="text-gray-200">{msg.username}</strong>
+                                                    <br />
+                                                    <p className="text-white">{msg.message}</p>
+                                                    <p className="text-right text-xs text-gray-200">{returnDisplayTime(msg.timestamp)}</p>
+                                                </div>
+                                                {(user.isAdmin) && (
+                                                <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 ml-3'>
+                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setMessageToDelete(msg);setIsDialogOpen(true)}}/>
+                                                </div>)}
+                                            </div>
+                                        )}
+                                    </div>
                                 </React.Fragment>
                             );
                         })}
@@ -215,6 +275,24 @@ const Chatroom = () => {
                     </div>
                 </div>
             </div>
+
+            <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <AlertDialogTrigger asChild>
+                <div></div>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel onClick={() => setIsDialogOpen(false)}>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={()=>{deleteMessage(messageToDelete)}}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
 };

@@ -55,3 +55,8 @@ body {
 .customButton:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
