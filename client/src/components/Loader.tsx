@@ -1,7 +1,7 @@
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 function Loader() {
-    const serverMessage = "The Server Can Take Upto 90 Seconds Due To Inactivity";
+    const serverMessage = "Almost There... Just a Moment!";
     return <div className="w-full h-80vh flex flex-col justify-center items-center">
         <div className="flex flex-col justify-center items-center">
             <DotLottieReact
