@@ -56,15 +56,6 @@ function Login() {
 
     if (isLoading) return <Loader />;
 
-    // return <div className="w-full h-90vh flex flex-col justify-center items-center">
-    //     <h1 className="mb-6 text-5xl text-center">Welcome To Login Page</h1>
-    //     <InputEntry changeFunction={updateUser} name="email" text="Email" placeholder="Enter Your Email" />
-    //     <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Enter Your Password" />
-    //     <button className="customButton" type="submit" onClick={storeData}>Submit</button>
-
-    //     <h2 className="text-2xl mb-4 mt-8">Don't have an Account?</h2>
-    //     <button className="customButton" onClick={()=>navigate("/register")}>Register</button>
-    // </div>
     return <div className="w-full h-90vh flex flex-row justify-center items-center">
         <div>
             <div className="flex flex-row justify-center items-center bg-credbg rounded-3xl overflow-hidden shadow-3xl">

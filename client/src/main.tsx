@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { AuthProvider } from './store/Auth.jsx';
-import { ToastContainer} from 'react-toastify';
+import { ToastContainer, Bounce} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -20,8 +20,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="dark"
-          //transition:Bounce
+          theme="light"
+          transition={Bounce}
         />
       </React.StrictMode>
   </AuthProvider>
