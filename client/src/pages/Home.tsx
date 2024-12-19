@@ -42,7 +42,6 @@ function Home() {
                     "Content-Type": "application/json",
                 },
             });
-            setLoading(false);
     
             if (!response.ok) {
                 throw new Error("Failed to fetch chatrooms");
