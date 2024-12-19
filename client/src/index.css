@@ -14,30 +14,25 @@ html {
   padding: 0px;
   margin: 0px;
   border: 0px;
-  /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
   font-family:Poppins;
 }
 
 body {
   /* background-color: #242424; */
   background-color: text-white;
-  background-image: url("/bg4.jpg");
-  background-size: cover; /* Zooms out by increasing the size to 150% of the container */
-  background-repeat: no-repeat; /* Prevents the background from tiling */
+  background-image: url("/bg5.jpg");
+  background-size:100%; 
+  background-repeat:repeat-y; 
   background-position: center;
 }
 
 .customHeader {
   background-color: text-white;
   background-image: url("/bg6.jpg");
-  background-size: 100%; /* Zooms out by increasing the size to 150% of the container */
-  background-repeat: no-repeat; /* Prevents the background from tiling */
+  background-size: 100%; 
+  background-repeat: no-repeat; 
   background-position: center;
 }
-
-/* h1,h2,h3,h4,h5,h6,p{
-  color: #ffffffde;
-}  */
 
 .customButton {
   border-radius: 8px;

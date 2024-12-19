@@ -131,7 +131,7 @@ function ManageChatrooms() {
 
     return <>
         {deleteConfirmation? 
-            (<div className="w-full h-90vh flex flex-col justify-center items-center">
+            (<div className="w-full h-80vh flex flex-col justify-center items-center">
                 <div className="bg-credbg mx-5 rounded-3xl overflow-hidden shadow-3xl px-10 py-8 flex flex-col justify-center items-center">
                     <h1 className="text-4xl text-center">Delete this Chatroom?</h1><br />
                     <div>
@@ -140,8 +140,8 @@ function ManageChatrooms() {
                     </div>
                 </div>
             </div>): (
-            <div className="w-full h-80vh">
-                <div className="flex flex-col justify-start items-center mx-5 mb-5">
+            <div className="w-full min-h-80vh">
+                <div className="flex flex-col justify-start items-center mx-5 mb-12">
                     <h1 className="text-4xl md:text-5xl text-center font-extrabold mt-20 mb-10">Manage Chatrooms</h1> 
                     
                     <div className="bg-credbg flex flex-col md:w-7/12 rounded-2xl overflow-hidden shadow-3xl">
