@@ -56,7 +56,7 @@ import {
             socketInstance.disconnect(); 
         };
     }, [chatroomId]);
-    
+
     type ChatroomType = {
         _id: string;
         chatroomName: string;
@@ -221,7 +221,7 @@ import {
                                         {msg.username === user.username ? (
                                             <div className='flex items-center justify-center self-end'>
                                                 <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 mr-3'>
-                                                    <FaPenToSquare className="mr-3 cursor-pointer text-slate-600 text-xl" />
+                                                    {/* <FaPenToSquare className="mr-3 cursor-pointer text-slate-600 text-xl" /> */}
                                                     <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setMessageToDelete(msg);setIsDialogOpen(true)}}/>
                                                 </div>
                                                 <div className="bg-blue-600 py-2 px-2 rounded-xl max-w-md break-words">
