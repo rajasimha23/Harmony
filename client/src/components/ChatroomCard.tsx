@@ -18,7 +18,7 @@ const ChatroomCard = (props: CardType) => {
     const formattedDate = unformattedDate.toLocaleDateString('en-US', options);
 
     const randomColor = () => {
-        const colors = ['bg-pink-400', 'bg-purple-400', 'bg-blue-400', 'bg-green-400', 'bg-yellow-400', 'bg-red-400'];
+        const colors = ['bg-[#cb3d3d]', 'bg-[#ff7728]','bg-[#ffce21]','bg-[#3aa71a]', 'bg-[#4b4b4b]','bg-[#1fd991]','bg-[#1edad5]','bg-[#0083b8]','bg-[#004bb8]','bg-[#2f1477]','bg-[#961bab]', 'bg-[#e01a9d], bg-[#f31265]'];
         return colors[Math.floor(Math.random() * colors.length)];
     };
 
