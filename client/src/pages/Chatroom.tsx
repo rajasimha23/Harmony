@@ -102,8 +102,7 @@ const Chatroom = () => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [loading, setLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [messageToDelete, setMessageToDelete] = useState<MessageType | null>(null);
-    const [messageToEdit, setMessageToEdit] = useState<MessageType | null>(null);
+    const [selectedMessage, setSelectedMessage] = useState<MessageType | null>(null);
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
     const [editedMessage, setEditedMessage] = useState<string>("");
 
@@ -182,7 +181,8 @@ const Chatroom = () => {
         });
     };
     
-    async function deleteMessage (msg:any) {
+    async function deleteMessage () {
+        const msg:MessageType = selectedMessage!;
         const data = {
             timestamp: msg.timestamp, 
             userId: msg.userId,
@@ -211,7 +211,8 @@ const Chatroom = () => {
         
     }
 
-    async function editMessage (msg:any, newMessage:string) {
+    async function editMessage (newMessage:string) {
+        const msg:MessageType = selectedMessage!;
         const data = {
             timestamp: msg.timestamp, 
             userId: msg.userId,
@@ -267,8 +268,8 @@ const Chatroom = () => {
                                         {msg.username === user.username ? (
                                             <div className='flex items-center justify-center self-end'>
                                                 <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 mr-3'>
-                                                    <FaPenToSquare className="mr-3 cursor-pointer text-slate-600 text-xl" onClick={()=>{setMessageToEdit(msg);setIsDialogOpen(true)}}/>
-                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setMessageToDelete(msg);setIsAlertDialogOpen(true)}}/>
+                                                    <FaPenToSquare className="mr-3 cursor-pointer text-slate-600 text-xl" onClick={()=>{setSelectedMessage(msg);setIsDialogOpen(true)}}/>
+                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setSelectedMessage(msg);setIsAlertDialogOpen(true)}}/>
                                                 </div>
                                                 <div className="bg-blue-600 py-2 px-2 rounded-xl max-w-md break-words">
                                                     <strong className="text-gray-200">{"You"}</strong>
@@ -287,7 +288,7 @@ const Chatroom = () => {
                                                 </div>
                                                 {(user.isAdmin) && (
                                                 <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 ml-3'>
-                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setMessageToDelete(msg);setIsAlertDialogOpen(true)}}/>
+                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setSelectedMessage(msg);setIsAlertDialogOpen(true)}}/>
                                                 </div>)}
                                             </div>
                                         )}
@@ -335,7 +336,7 @@ const Chatroom = () => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel onClick={() => setIsAlertDialogOpen(false)} className="font-universal hover:bg-blue-400 text-white hover:text-white bg-blue-600" >Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={()=>{deleteMessage(messageToDelete)}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={()=>{deleteMessage()}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
                 </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
@@ -353,17 +354,17 @@ const Chatroom = () => {
                         <Label htmlFor="oldName" className="text-right">
                         Old
                         </Label>
-                        <Input id="oldName" value={messageToEdit?.message} className="col-span-3" readOnly/>
+                        <Input id="oldName" value={selectedMessage?.message} className="col-span-3" readOnly/>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="newName" className="text-right">
                         New
                         </Label>
-                        <Input id="newName" defaultValue={messageToEdit?.message} onChange={(e)=>{setEditedMessage(e.target.value)}} className="col-span-3" autoFocus/>
+                        <Input id="newName" defaultValue={selectedMessage?.message} onChange={(e)=>{setEditedMessage(e.target.value)}} className="col-span-3" autoFocus/>
                     </div>
                     </div>
                     <DialogFooter>
-                    <Button onClick={()=>{editMessage(messageToEdit, editedMessage); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Save changes</Button>
+                    <Button onClick={()=>{editMessage(editedMessage); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Save changes</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
