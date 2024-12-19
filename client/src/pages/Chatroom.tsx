@@ -20,22 +20,36 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
 
-  const Chatroom = () => {
-      const { chatroomId } = useParams();
-      const {isLoggedIn} = useAuth();
-      const [messages, setMessages] = useState<MessageType[]>([]);
-      
-      useEffect(() => {
-          if (!isLoggedIn) {
-              navigate("/login"); 
-            }
-        }, [isLoggedIn]);
-        
-        useEffect(() => {
-            fetchChatroom();
-        fetchMessages();
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@radix-ui/react-label';
+
+
+const Chatroom = () => {
+    const { chatroomId } = useParams();
+    const {isLoggedIn} = useAuth();
+    const [messages, setMessages] = useState<MessageType[]>([]);
+    
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/login"); 
+        }
+    }, [isLoggedIn]);
+    
+    useEffect(() => {
+        fetchChatroom();
+    fetchMessages();
     }, [chatroomId]);
     
     useEffect(() => {
@@ -90,7 +104,9 @@ import {
     const [loading, setLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [messageToDelete, setMessageToDelete] = useState<MessageType | null>(null);
-
+    const [messageToEdit, setMessageToEdit] = useState<MessageType | null>(null);
+    const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
+    const [editedMessage, setEditedMessage] = useState<string>("");
 
     const fetchMessages = async () => {
         try {
@@ -195,6 +211,37 @@ import {
         }
         
     }
+
+    async function editMessage (msg:any, newMessage:string) {
+        const data = {
+            timestamp: msg.timestamp, 
+            userId: msg.userId,
+            newMessage: newMessage
+        };
+        
+        if (msg.username != user.username) {
+            toast("User Not authorized");
+            return;
+        }
+        
+        const response = await fetch(LINK + "api/chat/update", {
+            method:"PATCH",
+            headers:{
+                "Content-type":"Application/JSON"
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            toast("Successfully Edited Message");
+            fetchMessages();
+        }
+        else {
+            toast("Error Editing Message");
+        }
+        
+    }
+    
     
     if (loading) return <Loader />;
     return (
@@ -221,8 +268,8 @@ import {
                                         {msg.username === user.username ? (
                                             <div className='flex items-center justify-center self-end'>
                                                 <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 mr-3'>
-                                                    {/* <FaPenToSquare className="mr-3 cursor-pointer text-slate-600 text-xl" /> */}
-                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setMessageToDelete(msg);setIsDialogOpen(true)}}/>
+                                                    <FaPenToSquare className="mr-3 cursor-pointer text-slate-600 text-xl" onClick={()=>{setMessageToEdit(msg);setIsDialogOpen(true)}}/>
+                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setMessageToDelete(msg);setIsAlertDialogOpen(true)}}/>
                                                 </div>
                                                 <div className="bg-blue-600 py-2 px-2 rounded-xl max-w-md break-words">
                                                     <strong className="text-gray-200">{"You"}</strong>
@@ -241,7 +288,7 @@ import {
                                                 </div>
                                                 {(user.isAdmin) && (
                                                 <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 ml-3'>
-                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setMessageToDelete(msg);setIsDialogOpen(true)}}/>
+                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setMessageToDelete(msg);setIsAlertDialogOpen(true)}}/>
                                                 </div>)}
                                             </div>
                                         )}
@@ -276,23 +323,51 @@ import {
                 </div>
             </div>
 
-            <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
                 <AlertDialogTrigger asChild>
                 <div></div>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                    <AlertDialogTitle className="font-universal">Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription className="font-universal">
+                    This action cannot be undone. This will permanently delete this chat from our servers.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel onClick={() => setIsDialogOpen(false)}>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={()=>{deleteMessage(messageToDelete)}}>Continue</AlertDialogAction>
+                    <AlertDialogCancel onClick={() => setIsAlertDialogOpen(false)} className="font-universal hover:bg-blue-400 text-white hover:text-white bg-blue-600" >Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={()=>{deleteMessage(messageToDelete)}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
                 </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                    <DialogTitle>Edit Message</DialogTitle>
+                    <DialogDescription>
+                        Make changes to your Message here. Click save when you're done.
+                    </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="oldName" className="text-right">
+                        Old
+                        </Label>
+                        <Input id="oldName" value={messageToEdit?.message} className="col-span-3" readOnly/>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="newName" className="text-right">
+                        New
+                        </Label>
+                        <Input id="newName" defaultValue={messageToEdit?.message} onChange={(e)=>{setEditedMessage(e.target.value)}} className="col-span-3" autoFocus/>
+                    </div>
+                    </div>
+                    <DialogFooter>
+                    <Button onClick={()=>{editMessage(messageToEdit, editedMessage); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Save changes</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };

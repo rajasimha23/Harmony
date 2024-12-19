@@ -59,7 +59,7 @@ function Login() {
     return <div className="w-full h-90vh flex flex-row justify-center items-center">
         <div>
             <div className="flex flex-row justify-center items-center bg-credbg rounded-3xl overflow-hidden shadow-3xl">
-                <img src="Group2.png" style={{ width: "30rem", height: "auto", objectFit: "contain" }} />
+                <img src="group.png" style={{ width: "30rem", height: "auto", objectFit: "contain" }} />
                 <div className="flex flex-col justify-center items-center mx-12">
                     <img src="logo.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }} />
                     <h1 className="mb-10 text-5xl text-black text-center font-logo font-bold">Harmony</h1>

@@ -132,8 +132,8 @@ export const fetchChat = async (req, res, next) => {
 
 export const updateChat = async (req, res, next) => {
     try{
-        const {chatId, newMessage} = req.body;
-        const updation = await Chat.updateOne({_id: chatId}, {isEdited:true, message: newMessage});
+        const {timestamp, userId, newMessage} = req.body;
+        const updation = await Chat.updateOne({timestamp, userId}, {isEdited:true, message: newMessage});
         res.status(200).json({message: `Removal of Chat Successful`});
     }
     catch (err) {

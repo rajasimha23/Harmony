@@ -21,7 +21,10 @@ export default {
   		],
   		logo: [
   			'Inter'
-  		]
+  		],
+		universal: [
+			'Poppins'
+		]
   	},
   	extend: {
   		height: {

@@ -1,7 +1,11 @@
 import {useNavigate } from "react-router-dom";
 import useAuth from "../../store/Auth";
 
-function AddHeader () {
+type headerType = {
+    addTrigger: (x:boolean)=>void;
+}
+
+function AddHeader (props:headerType) {
     const navigate = useNavigate();
     const {user} = useAuth();
 
@@ -16,21 +20,21 @@ function AddHeader () {
                 </button>
                 <div className="flex justify-center">
                     {(!user.isAdmin) ? null : (<>
-                        <button onClick={() => { navigate("/createChatroom") }} className="relative group flex flex-col items-center ml-4" >
-                            <img src="add4.png" style={{ width: "2.9rem", height: "auto", objectFit: "contain" }} />
+                        <button onClick={() => { props.addTrigger(true)}} className="relative group flex flex-col items-center ml-4" >
+                            <img src="add.png" style={{ width: "2.9rem", height: "auto", objectFit: "contain" }} />
                             <div className="whitespace-nowrap absolute bottom-[-2.2rem] opacity-0 group-hover:opacity-100 transform scale-90 group-hover:scale-100 transition-all duration-300 ease-in-out bg-gray-800 text-white rounded-lg px-3 py-1">
                                 Add Chatroom
                             </div>
                         </button>
                         <button onClick={() => { navigate("/manage") }} className="relative group flex flex-col items-center ml-5">
-                            <img src="manager4.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }}/>
+                            <img src="manager.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }}/>
                             <div className="absolute bottom-[-2.2rem] opacity-0 group-hover:opacity-100 transform scale-90 group-hover:scale-100 transition-all duration-300 ease-in-out bg-gray-800 text-white rounded-lg px-3 py-1">
                                 Manage
                             </div>
                         </button>
                     </>)}
                     <button onClick={() => { navigate("/logout") }} className="relative group flex flex-col items-center ml-5" >
-                        <img src="logout7.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }} />
+                        <img src="logout.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }} />
                         <div className="absolute bottom-[-2.2rem] opacity-0 group-hover:opacity-100 transform scale-90 group-hover:scale-100 transition-all duration-300 ease-in-out bg-gray-800 text-white rounded-lg px-3 py-1">
                             Logout
                         </div>

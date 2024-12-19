@@ -20,7 +20,7 @@ html {
 body {
   /* background-color: #242424; */
   background-color: text-white;
-  background-image: url("/bg5.jpg");
+  background-image: url("/bg2.jpg");
   background-size:cover; 
   background-repeat:no-repeat; 
   background-position: center;
@@ -30,7 +30,7 @@ body {
 
 .customHeader {
   background-color: text-white;
-  background-image: url("/bg6.jpg");
+  background-image: url("/bgHeader.jpg");
   background-size: 100%; 
   background-repeat: no-repeat; 
   background-position: center;
