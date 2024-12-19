@@ -6,7 +6,6 @@ import Home from './pages/Home'
 import Header from "./components/headers/Header"
 import ManageChatrooms from "./pages/ManageChatrooms"
 import Chatroom from "./pages/Chatroom"
-import AddHeader from "./components/headers/AddHeader"
 
 function App() {
   return (

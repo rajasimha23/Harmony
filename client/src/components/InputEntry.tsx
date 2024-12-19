@@ -8,7 +8,6 @@ type InputEntryFormat = {
 
 function InputEntry(props:InputEntryFormat) {
     return <div className="text-center mb-4 shadow-md">   
-        {/* <label className="text-xl text-[#ffffffde]" htmlFor={props.name}>{props.text}</label><br /> */}
         <input onChange={props.changeFunction} type="text" className="px-3 py-1 rounded-lg w-64 h-10 text-left bg-inputColour text-black placeholder-black"
             id={props.name} name={props.name} placeholder={props.placeholder} value={props.value} autoComplete="on" required/>
         <br />

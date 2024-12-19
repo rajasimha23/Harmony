@@ -8,15 +8,12 @@ import { UserType } from "../store/Auth";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@radix-ui/react-label';
 import { toast } from "react-toastify";
 import AddHeader from "@/components/headers/AddHeader";
 import { MessageSquarePlus } from "lucide-react";
@@ -123,24 +120,15 @@ function Home() {
                 </div>
             </div>
 
-            
-
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent className="sm:max-w-[350px]">
                     <DialogHeader>
-                    <DialogTitle>Start a New Chatroom</DialogTitle>
-                    <DialogDescription>
-                        {/* Make changes to your Message here. Click save when you're done. */}
-                    </DialogDescription>
+                        <DialogTitle>Start a New Chatroom</DialogTitle>
                     </DialogHeader>
-                    {/* <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                        </div>
-                    </div> */}
-                    <Input id="newName" onChange={(e)=>{setChatroomName(e.target.value)}} className="col-span-3" autoFocus placeholder="Enter Room Name"/>
-                    <DialogFooter>
-                    <Button onClick={()=>{setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Cancel</Button>
-                    <Button onClick={()=>{createChatroom(); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Create Chatroom <MessageSquarePlus className="w-5 h-5 mr-2" /></Button>
+                    <Input id="newName" onChange={(e)=>{setChatroomName(e.target.value)}} className="w-full" autoFocus placeholder="Enter Room Name"/>
+                    <DialogFooter className="flex justify-end">
+                        <Button onClick={()=>{setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Cancel</Button>
+                        <Button onClick={()=>{createChatroom(); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Create <MessageSquarePlus className="w-5 h-5 mr-2" /></Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
