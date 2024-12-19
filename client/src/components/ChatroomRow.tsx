@@ -7,7 +7,7 @@ type CardType = {
     createdAt:Date,
     creatorUsername:string,
     chatroomId:number,
-    deleteHandler: () => void
+    deleteHandler: (x:boolean) => void
     setChatroomMethod: (x:number)=>void
 }
 
@@ -27,7 +27,7 @@ const ChatroomRow = (props:CardType) => {
                     { (!user.isAdmin) ? (null) : (<div className="flex justify-center items-center">
                         <FaTrashAlt
                             className="text-black text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 cursor-pointer"
-                            onClick={() => {props.setChatroomMethod(props.chatroomId); props.deleteHandler()}}
+                            onClick={() => {props.setChatroomMethod(props.chatroomId); props.deleteHandler(true)}}
                         />
                     </div>)}
                 </div>

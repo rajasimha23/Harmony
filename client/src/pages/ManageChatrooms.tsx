@@ -7,6 +7,18 @@ import {toast} from "react-toastify";
 import ChatroomRow from "../components/ChatroomRow";
 import { FaTrashAlt } from "react-icons/fa";
 import { UserType } from "../store/Auth";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 
 function ManageChatrooms() {
     const navigate = useNavigate();
@@ -26,8 +38,8 @@ function ManageChatrooms() {
     
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
-    const [deleteConfirmation, setDeleteConfirmation] = useState(false);
     const [selectedChatroomId, setChatroomId] = useState(0);
+    const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
 
     type CardType = {
         chatroomUserId:number,
@@ -40,13 +52,12 @@ function ManageChatrooms() {
     function createChatroomRows(entry:CardType){
         return <ChatroomRow chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
         key={entry.chatroomId} chatroomId={entry.chatroomId} 
-        deleteHandler={deleteChatroom} setChatroomMethod={setChatroomId}/>
+        setChatroomMethod={setChatroomId} deleteHandler={setIsAlertDialogOpen}/>
     }
 
 
-    async function confirmDeleteChatroom() {
+    async function deleteChatroom() {
         try {
-            setDeleteConfirmation(false);
             setLoading(true);
             const response = await fetch(LINK + "api/chatroom/remove", {
                 method: "DELETE",
@@ -89,10 +100,6 @@ function ManageChatrooms() {
         }
     }
 
-    async function deleteChatroom() {
-        setDeleteConfirmation(true)
-    }
-
     async function fetchChatrooms() {
         try {
             setLoading(true);
@@ -130,33 +137,41 @@ function ManageChatrooms() {
     if (isLoading) return <Loader />;
 
     return <>
-        {deleteConfirmation? 
-            (<div className="w-full h-80vh flex flex-col justify-center items-center">
-                <div className="bg-credbg mx-5 rounded-3xl overflow-hidden shadow-3xl px-10 py-8 flex flex-col justify-center items-center">
-                    <h1 className="text-4xl text-center">Delete this Chatroom?</h1><br />
-                    <div>
-                        <button className="w-32 h-12 mx-2 px-6 bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-400" onClick={()=>{setDeleteConfirmation(false)}}><h6 className="text-xl">Cancel</h6></button>
-                        <button className="w-32 h-12 mx-2 px-6 bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-400" onClick={confirmDeleteChatroom}><h6 className="text-xl">Yes</h6></button>
+        <div className="w-full min-h-80vh">
+            <div className="flex flex-col justify-start items-center mx-5 mb-12">
+                <h1 className="text-4xl md:text-5xl text-center font-extrabold mt-20 mb-10">Manage Chatrooms</h1> 
+                
+                <div className="bg-credbg flex flex-col md:w-7/12 rounded-2xl overflow-hidden shadow-3xl">
+                    <div className="bg-[#cfcfcf] py-6 px-4 group flex flex-row items-center">
+                        <FaTrashAlt className=" text-xl opacity-0 group-hover:opacity-0 transition-opacity duration-500 mr-3"/>
+                        <h1 className='text-2xl w-6/12 text-left text-black'>Chatroom</h1>
+                        <h2 className="text-2xl w-3/12 text-left text-black">Creator</h2>
+                        <h2 className="text-2xl w-3/12 text-left text-black">Created</h2>
                     </div>
+                    {chatrooms.map(createChatroomRows)}
                 </div>
-            </div>): (
-            <div className="w-full min-h-80vh">
-                <div className="flex flex-col justify-start items-center mx-5 mb-12">
-                    <h1 className="text-4xl md:text-5xl text-center font-extrabold mt-20 mb-10">Manage Chatrooms</h1> 
-                    
-                    <div className="bg-credbg flex flex-col md:w-7/12 rounded-2xl overflow-hidden shadow-3xl">
-                        <div className="bg-[#cfcfcf] py-6 px-4 group flex flex-row items-center">
-                            <FaTrashAlt className=" text-xl opacity-0 group-hover:opacity-0 transition-opacity duration-500 mr-3"/>
-                            <h1 className='text-2xl w-6/12 text-left text-black'>Chatroom</h1>
-                            <h2 className="text-2xl w-3/12 text-left text-black">Creator</h2>
-                            <h2 className="text-2xl w-3/12 text-left text-black">Created</h2>
-                        </div>
-                        {chatrooms.map(createChatroomRows)}
-                    </div>
 
-                </div>
-            </div>)
-        }
+            </div>
+        </div>
+
+        <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
+            <AlertDialogTrigger asChild>
+            <div></div>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle className="font-universal">Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription className="font-universal">
+                This action cannot be undone. This will permanently delete this Chatroom from our servers.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setIsAlertDialogOpen(false)} className="font-universal hover:bg-blue-400 text-white hover:text-white bg-blue-600" >Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={()=>{setIsAlertDialogOpen(false);deleteChatroom()}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
+            </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+        
     </>
 }   
 
