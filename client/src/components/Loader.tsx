@@ -21,7 +21,6 @@ function Loader() {
             <h2 className="text-3xl font-bold">{serverMessage}</h2>
         </div>
     </div>;
-    
 }
 
 export default Loader;
