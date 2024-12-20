@@ -105,10 +105,10 @@ function Home() {
 
     if (isLoading) return <Loader />;
 
-    return <>
+    return <div className="w-full min-h-screen">
         <AddHeader addTrigger={setIsDialogOpen}/>
         <>
-            <div className="w-full h-80vh">
+            <div className="w-full min-h-80vh">
                 <div className="mx-5">
                     <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-16">Welcome {user.username}!</h1>
                     <div className="flex flex-col justify-center items-center w-full">
@@ -127,13 +127,13 @@ function Home() {
                     </DialogHeader>
                     <Input id="newName" onChange={(e)=>{setChatroomName(e.target.value)}} className="w-full" autoFocus placeholder="Enter Room Name"/>
                     <DialogFooter className="flex justify-end">
-                        <Button onClick={()=>{setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Cancel</Button>
-                        <Button onClick={()=>{createChatroom(); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Create <MessageSquarePlus className="w-5 h-5 mr-2" /></Button>
+                        <Button onClick={()=>{setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Cancel</Button>
+                        <Button onClick={()=>{createChatroom(); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Create <MessageSquarePlus className="w-5 h-5 mr-2" /></Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
         </>
-    </>
+    </div>
 }   
 
 export default Home;
