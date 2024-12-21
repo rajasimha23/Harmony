@@ -103,7 +103,7 @@ function Home() {
     } 
 
 
-    if (isLoading) return <Loader />;
+    if (isLoading) return <><AddHeader addTrigger={setIsDialogOpen}/><Loader /></>;
 
     return <div className="w-full min-h-screen">
         <AddHeader addTrigger={setIsDialogOpen}/>
