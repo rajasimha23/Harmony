@@ -39,7 +39,7 @@ function Home() {
     const [chatrooms, setChatrooms] = useState([]);
     const [chatroomName, setChatroomName] = useState<string>("");
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-
+    
     type CardType = {
         chatroomUserId:number,
         chatroomName:string,
@@ -54,7 +54,7 @@ function Home() {
 
     function createChatroomCards(entry:CardType){
         return <ChatroomCard chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
-        key={entry.chatroomId} chatroomId={entry.chatroomId} />
+        key={entry.chatroomId} chatroomId={entry.chatroomId}/>
     }
 
     async function fetchChatrooms() {
