@@ -66,7 +66,6 @@ function Login() {
                     <InputEntry changeFunction={updateUser} name="email" text="Email" placeholder="Email" />
                     <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Password"/>
                     <button className="bg-blue-600 hover:bg-blue-500 py-2 px-4 rounded-lg text-white mt-3 mb-2 shadow-lg" type="submit" onClick={storeData}>Log in</button>
-
                     <h2 className="text-lg text-black mt-3">Don't have an Account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/register")}>Sign up</span></h2>
                 </div>
             </div>
