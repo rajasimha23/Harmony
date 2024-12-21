@@ -62,8 +62,8 @@ function Register() {
     if (isLoading) return <Loader />;
 
     return <div className="w-full h-90vh flex items-center justify-center">
-        <div className="flex bg-credbg rounded-3xl overflow-hidden shadow-3xl">
-            <img src="group2.png" style={{ width: "35rem", height: "auto", objectFit: "contain" }} />
+        <div className="flex bg-credbg rounded-3xl overflow-hidden shadow-3xl mx-5 flex-wrap py-10 custom:py-0 py-10">
+            <img src="group2.png" style={{ width: "35rem", height: "auto", objectFit: "contain" }} className="hidden custom:block"/>
             <div className="flex flex-col justify-center items-center text-center mx-20">
                 <img src="logo.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }} />
                 <h1 className="text-5xl mb-10 text-black font-logo font-bold">Harmony</h1>

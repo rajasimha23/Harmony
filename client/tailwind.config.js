@@ -29,6 +29,10 @@ export default {
 		]
   	},
   	extend: {
+		screens: {
+			'custom': '1055px', 
+			'custom2': '490px'
+		},
   		height: {
   			'90vh': '90vh',
   			'80vh': '80vh'
