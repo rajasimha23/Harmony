@@ -19,8 +19,6 @@ interface AuthContextType {
     storeTokenInLS: (serverToken: string) => void;
     LogoutUser: () => void;
     user: UserType;
-    setLastPage: (x:string)=>void;
-    lastPage: string;
 }
 
 export const AuthContext = React.createContext<AuthContextType|null>(null);
@@ -28,7 +26,6 @@ export const AuthContext = React.createContext<AuthContextType|null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isLoading, setLoading] = React.useState(false);
     const [token, setToken] = React.useState(localStorage.getItem(TOKENNAME));
-    const [lastPage, setLastPage] = useState("/home");
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<UserType>({
         email: "",
@@ -77,7 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         userAuthentication();
     }, [token]);
     
-    return (<AuthContext.Provider value={{isLoggedIn, storeTokenInLS, LogoutUser, user, setLastPage, lastPage}}>
+    return (<AuthContext.Provider value={{isLoggedIn, storeTokenInLS, LogoutUser, user}}>
         {isLoading?<><DummyHeader /><Loader /></> :children}
     </AuthContext.Provider>);
 };

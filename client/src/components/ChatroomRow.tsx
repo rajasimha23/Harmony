@@ -1,8 +1,6 @@
 import { FaTrashAlt } from "react-icons/fa";
-import useAuth from "../store/Auth";
 import { useNavigate } from "react-router-dom";
 import { FaPenToSquare } from "react-icons/fa6";
-import { Separator } from "./ui/separator";
 
 type CardType = {
     chatroomName:string,
@@ -21,8 +19,6 @@ const ChatroomRow = (props:CardType) => {
     const unformattedDate = new Date(dateStr);
     const options:Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
     const formattedDate = unformattedDate.toLocaleDateString('en-US', options);
-    const {user} = useAuth();
-
 
     return (
         <>
@@ -37,7 +33,6 @@ const ChatroomRow = (props:CardType) => {
                             className="text-slate-700 text-xl cursor-pointer"
                             onClick={() => {props.setChatroomMethod(props.chatroomId); props.deleteHandler(true)}}
                         />
-                        {/* <Separator/> */}
                     </div>
                 </div>
             </div>
