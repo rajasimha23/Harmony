@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LINK from "./Link";
 import Loader from "../components/Loader";
 import TOKENNAME from "./Token";
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         userAuthentication();
     }, [token]);
     

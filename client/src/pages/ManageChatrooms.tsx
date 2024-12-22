@@ -34,7 +34,7 @@ import { Label } from '@radix-ui/react-label';
 function ManageChatrooms() {
     const navigate = useNavigate();
     const {user, isLoggedIn}:{user:UserType, isLoggedIn:boolean} = useAuth();
-    
+
     useEffect(() => {
         if (!isLoggedIn) {
             navigate("/login"); 
