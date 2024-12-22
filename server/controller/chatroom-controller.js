@@ -14,7 +14,7 @@ export const addChatroom = async (req, res, next) => {
             return res.status(400).send({message: "User Does not have permission to Create Chatroom"});
         }
         const newChatroom = await Chatroom.create({chatroomName, creatorUserId, creatorUsername});
-        res.status(200).json({message: `Creation of Chatroom ${chatroomName} Successful`});
+        res.status(200).json({message: `Successfully Created Chatroom ${chatroomName}`});
     }
     catch (err) {
         const status = 404;
@@ -37,7 +37,7 @@ export const removeChatroom = async (req, res, next) => {
             return res.status(400).send({message: "User Does not have permission to Remove Chatroom"});
         }
         const deletion = await Chatroom.deleteOne({chatroomId: chatroomId});
-        res.status(200).json({message: `Removal of Chatroom ${chatroomId} Successful`});
+        res.status(200).json({message: `Successfully Removed Chatroom ${chatroomId}`});
     }
     catch (err) {
         const status = 404;
@@ -55,7 +55,7 @@ export const removeChatroom = async (req, res, next) => {
 export const fetchChatrooms = async (req, res, next) => {
     try{
         const chatrooms = await Chatroom.find();
-        res.status(200).json({message: `Fetching Chatrooms was Successful`, chatrooms:chatrooms});
+        res.status(200).json({message: `Successfully Fetched Chatrooms`, chatrooms:chatrooms});
     }
     catch (err) {
         const status = 404;
@@ -75,7 +75,7 @@ export const getChatroom = async (req, res, next) => {
     try{
         const {chatroomId} = req.body
         const chatroomInfo = await Chatroom.find({chatroomId: chatroomId});
-        res.status(200).json({message: `Getting Chatroom was Successful`, chatroomInfo:chatroomInfo});
+        res.status(200).json({message: `Successfully Fetched Chatroom`, chatroomInfo:chatroomInfo});
     }
     catch (err) {
         const status = 404;
@@ -87,5 +87,24 @@ export const getChatroom = async (req, res, next) => {
             extraDetails
         }
         next(errorDetails);
+    }
+}
+
+export const editChatroom = async (req, res, next) => {
+    try{
+        const {chatroomId, chatroomName} = req.body
+        const chatroomInfo = await Chatroom.updateOne({chatroomId: chatroomId}, {chatroomName: chatroomName});
+        res.status(200).json({message: `Successfully Edited Chatroom`, chatroomInfo:chatroomInfo});
+    }
+    catch (err) {
+        const status = 404;
+        const message = "Error in Editing Chatroom";
+        const extraDetails = "Not much";
+        const errorDetails = {
+            message,
+            status,
+            extraDetails
+        }
+    next(errorDetails);
     }
 }

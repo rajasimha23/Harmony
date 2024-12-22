@@ -31,10 +31,9 @@ function Home() {
 
     useEffect(()=>{
         fetchChatrooms();
-        setLastPage("/home");
     },[])
     
-    const {user, setLastPage}:{user:UserType, setLastPage:(x:string)=>void} = useAuth();
+    const {user}:{user:UserType} = useAuth();
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
     const [chatroomName, setChatroomName] = useState<string>("");
@@ -127,7 +126,7 @@ function Home() {
                     </DialogHeader>
                     <Input id="newName" onChange={(e)=>{setChatroomName(e.target.value)}} className="w-full" autoFocus placeholder="Enter Room Name"/>
                     <DialogFooter className="flex justify-end">
-                        <Button onClick={()=>{setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Cancel</Button>
+                        <Button className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Cancel</Button>
                         <Button onClick={()=>{createChatroom(); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Create <MessageSquarePlus className="w-5 h-5 mr-2" /></Button>
                     </DialogFooter>
                 </DialogContent>

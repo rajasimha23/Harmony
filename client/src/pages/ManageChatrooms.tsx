@@ -5,7 +5,6 @@ import Loader from "../components/Loader";
 import LINK from "../store/Link";
 import {toast} from "react-toastify";
 import ChatroomRow from "../components/ChatroomRow";
-import { FaTrashAlt } from "react-icons/fa";
 import { UserType } from "../store/Auth";
 import {
     AlertDialog,
@@ -18,15 +17,25 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@radix-ui/react-label';
+
 
 
 function ManageChatrooms() {
     const navigate = useNavigate();
-    const {user, setLastPage,isLoggedIn}:{user:UserType, setLastPage:(x:string)=>void, isLoggedIn:boolean} = useAuth();
+    const {user, isLoggedIn}:{user:UserType, isLoggedIn:boolean} = useAuth();
     
     useEffect(() => {
-        console.log(isLoggedIn);
-        console.log(user);
         if (!isLoggedIn) {
             navigate("/login"); 
         } 
@@ -39,7 +48,10 @@ function ManageChatrooms() {
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
     const [selectedChatroomId, setChatroomId] = useState(0);
+    const [editedName, setEditedName] = useState<string>("");
+    const [oldName, setOldName] = useState<string>("");
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     type CardType = {
         chatroomUserId:number,
@@ -52,7 +64,7 @@ function ManageChatrooms() {
     function createChatroomRows(entry:CardType){
         return <ChatroomRow chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
         key={entry.chatroomId} chatroomId={entry.chatroomId} 
-        setChatroomMethod={setChatroomId} deleteHandler={setIsAlertDialogOpen}/>
+        setChatroomMethod={setChatroomId} deleteHandler={setIsAlertDialogOpen} editHandler={setIsDialogOpen} setOldName={setOldName}/>
     }
 
 
@@ -100,6 +112,31 @@ function ManageChatrooms() {
         }
     }
 
+    async function editChatroom() {
+        try {
+            setLoading(true);
+            const response = await fetch(LINK + "api/chatroom/edit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    chatroomId:selectedChatroomId,
+                    chatroomName: editedName
+                })
+            });
+            const resp_data = await response.json();
+            toast(resp_data.message);
+            if (response.ok) fetchChatrooms();
+        }
+        catch {
+
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
     async function fetchChatrooms() {
         try {
             setLoading(true);
@@ -131,7 +168,6 @@ function ManageChatrooms() {
     }
     useEffect(()=>{
         fetchChatrooms();
-        setLastPage("/manage");
     },[])
 
     if (isLoading) return <Loader />;
@@ -143,10 +179,10 @@ function ManageChatrooms() {
                 
                 <div className="bg-credbg flex flex-col md:w-7/12 rounded-2xl overflow-hidden shadow-3xl">
                     <div className="bg-[#cfcfcf] py-6 px-4 group flex flex-row items-center">
-                        <FaTrashAlt className=" text-xl opacity-0 group-hover:opacity-0 transition-opacity duration-500 mr-3"/>
                         <h1 className='text-2xl w-6/12 text-left text-black'>Chatroom</h1>
-                        <h2 className="text-2xl w-3/12 text-left text-black">Creator</h2>
+                        <h2 className="text-2xl w-2/12 text-left text-black">Creator</h2>
                         <h2 className="text-2xl w-3/12 text-left text-black">Created</h2>
+                        <h2 className="text-2xl w-1/12 text-left text-black">Action</h2>
                     </div>
                     {chatrooms.map(createChatroomRows)}
                 </div>
@@ -166,12 +202,39 @@ function ManageChatrooms() {
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setIsAlertDialogOpen(false)} className="font-universal hover:bg-blue-400 text-white hover:text-white bg-blue-600" >Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={()=>{setIsAlertDialogOpen(false);deleteChatroom()}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
+                <AlertDialogCancel className="font-universal hover:bg-blue-400 text-white hover:text-white bg-blue-600" >Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={()=>{deleteChatroom(); setIsAlertDialogOpen(false)}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
             </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
         
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                <DialogTitle>Edit Name</DialogTitle>
+                <DialogDescription>
+                    Make changes to your Chatroom Name here. Click save when you're done.
+                </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="oldName" className="text-right">
+                    Old
+                    </Label>
+                    <Input id="oldName" value={oldName} className="col-span-3" readOnly/>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="newName" className="text-right">
+                    New
+                    </Label>
+                    <Input id="newName" defaultValue={oldName} onChange={(e)=>{setEditedName(e.target.value)}} className="col-span-3" autoFocus/>
+                </div>
+                </div>
+                <DialogFooter>
+                <Button onClick={()=>{editChatroom(); setIsDialogOpen(false)    }} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Save changes</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </>
 }   
 
