@@ -37,7 +37,7 @@ const io = new Server(server, {
 });
 
 app.get('/', (req, res) => {
-    res.send('Hello from Node.js on Vercel!');
+    res.json({msg:'Hello from Node.js on Vercel!'});
   });
 
 io.on("connection", (socket) => {
