@@ -47,7 +47,7 @@ function Home() {
         chatroomId:number
     }
 
-    interface RespType{
+    type RespType = {
         message:string
     }
 
