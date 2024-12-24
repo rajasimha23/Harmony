@@ -38,6 +38,8 @@ function Home() {
     const [chatrooms, setChatrooms] = useState([]);
     const [chatroomName, setChatroomName] = useState<string>("");
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const [isUploadDialogOpen, setIsUploadDialogOpen] = useState<boolean>(false);
+    const [file, setFile] = useState<File | null>(null);
     
     type CardType = {
         chatroomUserId:number,
@@ -101,11 +103,42 @@ function Home() {
         fetchChatrooms();
     } 
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+          setFile(e.target.files[0]);
+        }
+    };
 
-    if (isLoading) return <><AddHeader addTrigger={setIsDialogOpen}/><Loader /></>;
+    const handleUpload = async () => {
+        if (!file) {
+          toast('Please select a file first!');
+          return;
+        }
+    
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        try {
+          const response = await fetch('http://localhost:5000/api/file/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const result = await response.json();
+          if (response.ok) {
+            toast('File uploaded and data stored successfully!');
+          } else {
+            toast(`Error: ${result.message}`);
+          }
+        } catch (err) {
+          console.error(err);
+          toast('Something went wrong!');
+        }
+    };
+
+    if (isLoading) return <><AddHeader addTrigger={setIsDialogOpen} fileAddTrigger={setIsUploadDialogOpen}/><Loader /></>;
 
     return <div className="w-full min-h-screen">
-        <AddHeader addTrigger={setIsDialogOpen}/>
+        <AddHeader addTrigger={setIsDialogOpen} fileAddTrigger={setIsUploadDialogOpen}/>
         <>
             <div className="w-full min-h-80vh">
                 <div className="mx-5">
@@ -126,8 +159,21 @@ function Home() {
                     </DialogHeader>
                     <Input id="newName" onChange={(e)=>{setChatroomName(e.target.value)}} className="w-full" autoFocus placeholder="Enter Room Name"/>
                     <DialogFooter className="flex justify-end">
-                        <Button className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Cancel</Button>
+                        <Button onClick={()=>{setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Cancel</Button>
                         <Button onClick={()=>{createChatroom(); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Create <MessageSquarePlus className="w-5 h-5 mr-2" /></Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+                <DialogContent className="sm:max-w-[350px]">
+                    <DialogHeader>
+                        <DialogTitle>Upload Excel Sheet</DialogTitle>
+                    </DialogHeader>
+                    <Input id="newFile" type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="w-full bg-blue-200 cursor-pointer" autoFocus/>
+                    <DialogFooter className="flex justify-end">
+                        <Button onClick={()=>{setIsUploadDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Cancel</Button>
+                        <Button onClick={()=>{handleUpload(); setIsUploadDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Upload</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
