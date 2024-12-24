@@ -10,7 +10,7 @@ import errorMiddleware from "./middlewares/error-middleware.js";
 import chatroomRouter from "./router/chatroom-router.js"
 import chatRouter from "./router/chat-router.js";
 import Chat from "./models/chat-model.js";
-
+import fileRouter from "./router/file-router.js";
 
 const PORT= 5000; 
 const app = express();
@@ -26,6 +26,7 @@ app.use(express.json());
 app.use("/api/auth", router);
 app.use("/api/chatroom", chatroomRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/file", fileRouter);
 app.use(errorMiddleware);
 
 const server = http.createServer(app);
