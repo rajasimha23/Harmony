@@ -1,5 +1,6 @@
 import XLSX from "xlsx";
 import User from "../models/user-model.js";
+import fs from "fs/promises";
 
 export async function uploadFile(req, res) {
     try {
@@ -18,7 +19,7 @@ export async function uploadFile(req, res) {
             });
             await user.save();
         }
-
+        fs.unlink(filePath);
         res.status(200).json({ message: 'Data imported successfully!' });
         } catch (err) {
         console.error(err);
