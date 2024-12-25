@@ -2,7 +2,6 @@ import { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../store/Auth";
 import Loader from "../components/Loader";
-import LINK from "../store/Link";
 import ChatroomCard from "../components/ChatroomCard";
 import { UserType } from "../store/Auth";
 import {
@@ -17,6 +16,8 @@ import { Input } from '@/components/ui/input';
 import { toast } from "react-toastify";
 import AddHeader from "@/components/headers/AddHeader";
 import { MessageSquarePlus } from "lucide-react";
+import { CardType } from "@/store/Types";
+import { createChatroom, fetchChatrooms, handleUpload } from "@/api/Home";
 
 
 function Home() {
@@ -30,7 +31,7 @@ function Home() {
     }, [isLoggedIn]);
 
     useEffect(()=>{
-        fetchChatrooms();
+        fetchChatroomsLocal();
     },[])
     
     const {user}:{user:UserType} = useAuth();
@@ -41,43 +42,17 @@ function Home() {
     const [isUploadDialogOpen, setIsUploadDialogOpen] = useState<boolean>(false);
     const [file, setFile] = useState<File | null>(null);
     
-    type CardType = {
-        chatroomUserId:number,
-        chatroomName:string,
-        createdAt:Date,
-        creatorUsername:string
-        chatroomId:number
-    }
-
-    type RespType = {
-        message:string
-    }
+    
 
     function createChatroomCards(entry:CardType){
         return <ChatroomCard chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
         key={entry.chatroomId} chatroomId={entry.chatroomId}/>
     }
 
-    async function fetchChatrooms() {
+    async function fetchChatroomsLocal() {
         try {
             setLoading(true);
-            const response = await fetch(LINK + "api/chatroom/fetch", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-    
-            if (!response.ok) {
-                throw new Error("Failed to fetch chatrooms");
-            }
-    
-            const resp = await response.json();
-    
-            if (!Array.isArray(resp.chatrooms)) {
-                throw new Error("Invalid data format: chatrooms is not an array");
-            }
-    
+            const resp = await fetchChatrooms();
             setChatrooms(resp.chatrooms);
         } catch (error) {
             setChatrooms([]); 
@@ -86,21 +61,20 @@ function Home() {
         }
     }
 
-    async function createChatroom() {
-        const resp = await fetch(LINK + "api/chatroom/add", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                chatroomName: chatroomName,
-                creatorUserId: user.userId,
-                creatorUsername: user.username
-            })
-        }); 
-        const responseData:RespType = await resp.json();
-        toast(responseData.message);
-        fetchChatrooms();
+    async function createChatroomLocal() {
+        const data = {chatroomName:chatroomName, creatorUserId: user.userId, creatorUsername: user.username};
+        try {
+            setLoading(true);
+            const resp = await createChatroom(data);
+            toast(resp.message);
+            fetchChatroomsLocal();
+        }
+        catch (error) {
+            toast.error("Error Creating Chatroom");
+        }
+        finally{
+            setLoading(false);
+        }
     } 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,29 +83,18 @@ function Home() {
         }
     };
 
-    const handleUpload = async () => {
+    const handleUploadLocal = async () => {
         if (!file) {
           toast('Please select a file first!');
           return;
         }
     
-        const formData = new FormData();
-        formData.append('file', file);
-    
         try {
-          const response = await fetch('http://localhost:5000/api/file/upload', {
-            method: 'POST',
-            body: formData,
-          });
-          const result = await response.json();
-          if (response.ok) {
+            const response = await handleUpload(file);
             toast('File uploaded and data stored successfully!');
-          } else {
-            toast(`Error: ${result.message}`);
-          }
-        } catch (err) {
-          console.error(err);
-          toast('Something went wrong!');
+        } 
+        catch (err) {
+            toast('Something went wrong!');
         }
     };
 
@@ -160,7 +123,7 @@ function Home() {
                     <Input id="newName" onChange={(e)=>{setChatroomName(e.target.value)}} className="w-full" autoFocus placeholder="Enter Room Name"/>
                     <DialogFooter className="flex justify-end">
                         <Button onClick={()=>{setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Cancel</Button>
-                        <Button onClick={()=>{createChatroom(); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Create <MessageSquarePlus className="w-5 h-5 mr-2" /></Button>
+                        <Button onClick={()=>{createChatroomLocal(); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Create <MessageSquarePlus className="w-5 h-5 mr-2" /></Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -173,7 +136,7 @@ function Home() {
                     <Input id="newFile" type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="w-full bg-blue-200 cursor-pointer" autoFocus/>
                     <DialogFooter className="flex justify-end">
                         <Button onClick={()=>{setIsUploadDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Cancel</Button>
-                        <Button onClick={()=>{handleUpload(); setIsUploadDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Upload</Button>
+                        <Button onClick={()=>{handleUploadLocal(); setIsUploadDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Upload</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

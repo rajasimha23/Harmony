@@ -3,9 +3,9 @@ import InputEntry from "../components/InputEntry";
 import {useAuth} from "../store/Auth"
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
-import LINK from "../store/Link";
 import Loader from "../components/Loader";
 import InputEntryPassword from "../components/InputEntryPassword";
+import { storeData } from "@/api/Login";
 
 function Login() {
     const navigate = useNavigate();
@@ -32,25 +32,18 @@ function Login() {
         });
     }
     
-    async function storeData() {
+    async function storeDataLocal() {
         setLoading(true);
-        const response = await fetch(LINK + "api/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(user)
-        }); 
-        setLoading(false);
-        if (response.ok) {
+        try {
+            const response = await storeData(user);
             toast("Successfully Logged in");
-            const resp_data = await response.json();
-            storeTokenInLS(resp_data.token);
-            navigate("/home");
+            storeTokenInLS(response.token);
         }
-        else {
-            const res_data = await response.json();
-            toast(res_data.message);
+        catch (error) {
+            toast("Error storing data");
+        }
+        finally {
+            setLoading(false);
         }
     }
 
@@ -65,7 +58,7 @@ function Login() {
                     <h1 className="mb-10 text-5xl text-black text-center font-logo font-bold">Harmony</h1>
                     <InputEntry changeFunction={updateUser} name="email" text="Email" placeholder="Email" />
                     <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Password"/>
-                    <button className="bg-blue-600 hover:bg-blue-500 py-2 px-4 rounded-lg text-white mt-3 mb-2 shadow-lg" type="submit" onClick={storeData}>Log in</button>
+                    <button className="bg-blue-600 hover:bg-blue-500 py-2 px-4 rounded-lg text-white mt-3 mb-2 shadow-lg" type="submit" onClick={storeDataLocal}>Log in</button>
                     <h2 className="text-lg text-black mt-3">Don't have an Account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/register")}>Sign up</span></h2>
                 </div>
             </div>

@@ -3,9 +3,9 @@ import InputEntry from "../components/InputEntry";
 import useAuth from "../store/Auth";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
-import LINK from "../store/Link";
 import InputEntryPassword from "../components/InputEntryPassword";
 import Loader from "../components/Loader";
+import { storeData } from "@/api/Register";
 
 function Register() {
     const navigate = useNavigate();
@@ -17,7 +17,6 @@ function Register() {
         }
     }, [isLoggedIn]);
     
-    const {storeTokenInLS}  = useAuth();
     const [user,setUser] = useState({username: "", email: "", password: "", confirmPassword: "", match: true});
     const [isLoading, setLoading] = useState(false);
 
@@ -33,29 +32,22 @@ function Register() {
         });
     }
 
-    async function storeData() {
+    async function storeDataLocal() {
         if (!user.match) {
             toast("Passwords Do Not Match");
             return;
         }
         setLoading(true);
-        const response = await fetch(LINK + "api/auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(user)
-        }); 
-        setLoading(false);
-        if (response.ok) {
+        try {
+            const response = await storeData(user);
             toast("Successfully Registered");
-            const resp_data = await response.json();
-            storeTokenInLS(resp_data.token);
             navigate("/home");
         }
-        else {
-            const res_data = await response.json();
-            toast(res_data.message);
+        catch (error) {
+            
+        }
+        finally {
+            setLoading(false);
         }
     }
 
@@ -71,7 +63,7 @@ function Register() {
                 <InputEntry changeFunction={updateUser} name="email" text="Email" placeholder="Email" value={user.email} />
                 <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Password" value={user.password} />
                 <InputEntryPassword changeFunction={updateUser} name="confirmPassword" text="Confirm Password" placeholder="Confirm Password" value={user.confirmPassword} />
-                <button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white rounded-lg py-2 px-4 mt-3 shadow-lg" onClick={storeData}>Sign up</button>
+                <button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white rounded-lg py-2 px-4 mt-3 shadow-lg" onClick={storeDataLocal}>Sign up</button>
 
                 <h2 className="text-lg mt-5 text-black">Already have an Account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/login")}>Log in</span></h2>
             </div>

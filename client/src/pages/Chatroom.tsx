@@ -132,74 +132,79 @@ const Chatroom = () => {
     
     async function deleteMessageLocal() {
         const msg = selectedMessage!;
-        const data = {
-            timestamp: msg.timestamp, 
-            userId: msg.userId,
-        };
         if (msg.username != user.username && !user.isAdmin) {
             toast("User Not authorized");
             return;
         }
+        const data = {
+            timestamp: msg.timestamp, 
+            userId: msg.userId,
+        };
         setLoading(true);
-        const response = await deleteMessage(data);   
-        setLoading(false);
-        if (response.ok) {
+        try {
+            const response = await deleteMessage(data); 
             toast("Successfully Deleted Message");
-            fetchMessages(Number(chatroomId));
+            fetchMessages(Number(chatroomId));  
+        }   
+        catch (error) {
+            toast.error("Error Deleting Message");
         }
-        else {
-            toast("Error Deleting Message");
+        finally {
+            setLoading(false);
         }
     }
     
     async function editMessageLocal(newMessage: string) {
         const msg:MessageType = selectedMessage!;
+        if (msg.username != user.username) {
+            toast("User Not authorized");
+            return;
+        }
         const data = {
             timestamp: msg.timestamp, 
             userId: msg.userId,
             newMessage: newMessage
         };
-        
-        if (msg.username != user.username) {
-            toast("User Not authorized");
-            return;
-        }
         setLoading(true);
-        const response = await editMessage(data);    
-        setLoading(false);
-        if (response.ok) {
+        try{
+            const response = await editMessage(data); 
             toast("Successfully Edited Message");
             fetchMessages(Number(chatroomId));
         }
-        else {
-            toast("Error Editing Message");
+        catch (error) {
+            toast.error("Error Editing Message");
+        }
+        finally {
+            setLoading(false);
         }
     }
 
     async function fetchMessagesLocal() {
-        setLoading(true);
-        const response = await fetchMessages(Number(chatroomId));
-        const data = await response.json();
-        setLoading(false);
-        if (response.ok) {
-            setMessages(data.chatrooms);
+        try {
+            setLoading(true);
+            const response = await fetchMessages(Number(chatroomId));
+            setMessages(response.chatrooms);
             setMessagesSet(true);
         }
-        else {
-            toast("Error Fetching Messages");
+        catch (error) {
+            toast.error("Error Fetching Messages");
+        }
+        finally {
+            setLoading(false);
         }
     }
 
     async function fetchChatroomLocal() {
         setLoading(true);
-        const response = await fetchChatroom(Number(chatroomId));
-        const data = await response.json();
-        setLoading(false);
-        if (response.ok) {
-            setChatroomData(data.chatroomInfo[0]);
+        try {
+            const response = await fetchChatroom(Number(chatroomId));
+            setChatroomData(response.chatroomInfo[0]);
         }
-        else {
-            toast("Error Fetching Chatroom");
+        catch (error) {
+            toast.error("Error Fetching Chatroom");
+        }
+        finally {
+            setLoading(false);
         }
     }
 

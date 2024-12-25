@@ -13,3 +13,15 @@ export type MessageType = {
     message: string;
     timestamp: Date;
 };
+
+export type CardType = {
+    chatroomUserId:number,
+    chatroomName:string,
+    createdAt:Date,
+    creatorUsername:string
+    chatroomId:number
+}
+
+export type RespType = {
+    message:string
+}
