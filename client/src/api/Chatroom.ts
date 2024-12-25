@@ -1,4 +1,3 @@
-import {ChatroomType, MessageType} from "../store/Types";
 import LINK from "@/store/Link";
 
 export async function deleteMessage (data: {timestamp:Date, userId: number}) {

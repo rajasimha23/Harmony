@@ -48,8 +48,8 @@ const Chatroom = () => {
     }, [isLoggedIn]);
     
     useEffect(() => {
-        fetchChatroom();
-    fetchMessages();
+        fetchChatroomLocal();
+        fetchMessagesLocal();
     }, [chatroomId]);
     
     useEffect(() => {
@@ -140,7 +140,9 @@ const Chatroom = () => {
             toast("User Not authorized");
             return;
         }
+        setLoading(true);
         const response = await deleteMessage(data);   
+        setLoading(false);
         if (response.ok) {
             toast("Successfully Deleted Message");
             fetchMessages(Number(chatroomId));
@@ -150,7 +152,7 @@ const Chatroom = () => {
         }
     }
     
-    async function editMessageLocal() {
+    async function editMessageLocal(newMessage: string) {
         const msg:MessageType = selectedMessage!;
         const data = {
             timestamp: msg.timestamp, 
@@ -162,8 +164,9 @@ const Chatroom = () => {
             toast("User Not authorized");
             return;
         }
-        
+        setLoading(true);
         const response = await editMessage(data);    
+        setLoading(false);
         if (response.ok) {
             toast("Successfully Edited Message");
             fetchMessages(Number(chatroomId));
@@ -174,11 +177,30 @@ const Chatroom = () => {
     }
 
     async function fetchMessagesLocal() {
-        
+        setLoading(true);
+        const response = await fetchMessages(Number(chatroomId));
+        const data = await response.json();
+        setLoading(false);
+        if (response.ok) {
+            setMessages(data.chatrooms);
+            setMessagesSet(true);
+        }
+        else {
+            toast("Error Fetching Messages");
+        }
     }
 
     async function fetchChatroomLocal() {
-        
+        setLoading(true);
+        const response = await fetchChatroom(Number(chatroomId));
+        const data = await response.json();
+        setLoading(false);
+        if (response.ok) {
+            setChatroomData(data.chatroomInfo[0]);
+        }
+        else {
+            toast("Error Fetching Chatroom");
+        }
     }
 
     if (loading) return <Loader />;
@@ -274,7 +296,7 @@ const Chatroom = () => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel className="font-universal hover:bg-blue-400 text-white hover:text-white bg-blue-600" >Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={()=>{deleteMessage();  setIsAlertDialogOpen(false)}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={()=>{deleteMessageLocal();  setIsAlertDialogOpen(false)}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
                 </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
@@ -302,7 +324,7 @@ const Chatroom = () => {
                     </div>
                     </div>
                     <DialogFooter>
-                    <Button onClick={()=>{editMessage(editedMessage); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Save changes</Button>
+                    <Button onClick={()=>{editMessageLocal(editedMessage); setIsDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Save changes</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
