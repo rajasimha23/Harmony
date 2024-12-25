@@ -6,8 +6,9 @@ const validateLogin = (schema) => async (req, res, next) => {
     }
     catch (err) {
         const status = 404;
-        const message = "Fill the inpust properly -lm";
+        const message = err.errors[0].message;
         const extraDetails = err.errors[0].message;
+        console.log(extraDetails);
         const errorDetails = {
             message,
             status,

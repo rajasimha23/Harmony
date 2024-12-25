@@ -7,9 +7,11 @@ import InputEntryPassword from "../components/InputEntryPassword";
 import Loader from "../components/Loader";
 import { storeData } from "@/api/Register";
 
+
 function Register() {
     const navigate = useNavigate();
     const {isLoggedIn} = useAuth();
+    const {storeTokenInLS}  = useAuth();
     
     useEffect(() => {
         if (isLoggedIn) {
@@ -39,12 +41,13 @@ function Register() {
         }
         setLoading(true);
         try {
-            const response = await storeData(user);
+            const response= await storeData(user);
+            storeTokenInLS(response.token);
             toast("Successfully Registered");
             navigate("/home");
         }
         catch (error) {
-            
+            if (error instanceof Error) toast(error.message);
         }
         finally {
             setLoading(false);

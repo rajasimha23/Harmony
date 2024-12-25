@@ -40,7 +40,7 @@ function Login() {
             storeTokenInLS(response.token);
         }
         catch (error) {
-            toast("Error storing data");
+            if (error instanceof Error) toast(error.message);
         }
         finally {
             setLoading(false);

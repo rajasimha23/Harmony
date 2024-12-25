@@ -8,11 +8,11 @@ export async function storeData(user: {email: string, password: string}) {
         },
         body: JSON.stringify(user)
     }); 
+    const resp_data = await response.json();
     if (response.ok) {
-        const resp_data = await response.json();
         return resp_data;
     }
     else {
-        throw new Error("Error Storing data");
+        throw new Error(resp_data.message);
     }
 }
