@@ -37,7 +37,7 @@ export const removeChatroom = async (req, res, next) => {
             return res.status(400).send({message: "User Does not have permission to Remove Chatroom"});
         }
         const deletion = await Chatroom.deleteOne({chatroomId: chatroomId});
-        res.status(200).json({message: `Successfully Removed Chatroom ${chatroomId}`});
+        res.status(200).json({message: `Successfully Removed Chatroom`});
     }
     catch (err) {
         const status = 404;
