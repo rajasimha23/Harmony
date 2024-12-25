@@ -82,6 +82,7 @@ function ManageChatrooms() {
             const data = {selectedChatroomId: selectedChatroomId, editedName: editedName}
             setLoading(true);
             const response = await editChatroom(data);
+            fetchChatroomsLocal();
             toast.success(response.message);
         }
         catch (error) {

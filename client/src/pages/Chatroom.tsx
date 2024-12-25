@@ -133,7 +133,7 @@ const Chatroom = () => {
     async function deleteMessageLocal() {
         const msg = selectedMessage!;
         if (msg.username != user.username && !user.isAdmin) {
-            toast("User Not authorized");
+            toast.error("User Not authorized");
             return;
         }
         const data = {
@@ -143,8 +143,8 @@ const Chatroom = () => {
         setLoading(true);
         try {
             const response = await deleteMessage(data); 
-            toast("Successfully Deleted Message");
-            fetchMessages(Number(chatroomId));  
+            toast.success("Successfully Deleted Message");
+            fetchMessagesLocal();  
         }   
         catch (error) {
             toast.error("Error Deleting Message");
@@ -157,7 +157,7 @@ const Chatroom = () => {
     async function editMessageLocal(newMessage: string) {
         const msg:MessageType = selectedMessage!;
         if (msg.username != user.username) {
-            toast("User Not authorized");
+            toast.error("User Not authorized");
             return;
         }
         const data = {
@@ -168,8 +168,8 @@ const Chatroom = () => {
         setLoading(true);
         try{
             const response = await editMessage(data); 
-            toast("Successfully Edited Message");
-            fetchMessages(Number(chatroomId));
+            toast.success("Successfully Edited Message");
+            fetchMessagesLocal();
         }
         catch (error) {
             toast.error("Error Editing Message");

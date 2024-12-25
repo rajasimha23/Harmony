@@ -14,7 +14,7 @@ export async function deleteChatroom(data: {selectedChatroomId:number, userId: n
     });
     const resp_data = await response.json();
     if (response.ok) {
-        const response2 = await fetch(LINK + "api/chat/deleteChatroomChats", {
+        await fetch(LINK + "api/chat/deleteChatroomChats", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

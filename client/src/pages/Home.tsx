@@ -66,7 +66,7 @@ function Home() {
         try {
             setLoading(true);
             const resp = await createChatroom(data);
-            toast(resp.message);
+            toast.success(resp.message);
             fetchChatroomsLocal();
         }
         catch (error) {
@@ -85,16 +85,16 @@ function Home() {
 
     const handleUploadLocal = async () => {
         if (!file) {
-          toast('Please select a file first!');
+          toast.error('Please select a file first!');
           return;
         }
     
         try {
             const response = await handleUpload(file);
-            toast('File uploaded and data stored successfully!');
+            toast.success('File uploaded and data stored successfully!');
         } 
         catch (err) {
-            toast('Something went wrong!');
+            toast.error('Something went wrong!');
         }
     };
 

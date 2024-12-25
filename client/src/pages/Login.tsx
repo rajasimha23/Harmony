@@ -36,11 +36,11 @@ function Login() {
         setLoading(true);
         try {
             const response = await storeData(user);
-            toast("Successfully Logged in");
+            toast.success("Successfully Logged in");
             storeTokenInLS(response.token);
         }
         catch (error) {
-            if (error instanceof Error) toast(error.message);
+            if (error instanceof Error) toast.error(error.message);
         }
         finally {
             setLoading(false);

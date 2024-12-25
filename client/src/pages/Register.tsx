@@ -36,18 +36,18 @@ function Register() {
 
     async function storeDataLocal() {
         if (!user.match) {
-            toast("Passwords Do Not Match");
+            toast.error("Passwords Do Not Match");
             return;
         }
         setLoading(true);
         try {
             const response= await storeData(user);
             storeTokenInLS(response.token);
-            toast("Successfully Registered");
+            toast.success("Successfully Registered");
             navigate("/home");
         }
         catch (error) {
-            if (error instanceof Error) toast(error.message);
+            if (error instanceof Error) toast.error(error.message);
         }
         finally {
             setLoading(false);
