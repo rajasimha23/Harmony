@@ -70,7 +70,7 @@ function Home() {
             fetchChatroomsLocal();
         }
         catch (error) {
-            toast.error("Error Creating Chatroom");
+            if (error instanceof Error) toast.error(error.message);
         }
         finally{
             setLoading(false);

@@ -7,13 +7,11 @@ export async function fetchChatrooms() {
             "Content-Type": "application/json",
         },
     });
-        
-    if (!response.ok) {
-        throw new Error("Failed to fetch chatrooms");
-    }
-
+    
     const resp = await response.json();
-
+    if (!response.ok) {
+        throw new Error(resp.message);
+    }
     if (!Array.isArray(resp.chatrooms)) {
         throw new Error("Invalid data format: chatrooms is not an array");
     }
@@ -34,7 +32,7 @@ export async function createChatroom(data: {chatroomName: string, creatorUserId:
     }); 
     const resp = await response.json();
     if (!response.ok) {
-        throw new Error("Failed to fetch chatrooms");
+        throw new Error(resp.message);
     }
     else {
         return resp.message;
@@ -52,5 +50,5 @@ export const handleUpload = async (file:File) => {
     if (response.ok) {
         return resp;
     }
-    else throw new Error("Failed To Upload File");
+    else throw new Error(resp.message);
 };

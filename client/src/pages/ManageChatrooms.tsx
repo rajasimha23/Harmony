@@ -2,7 +2,6 @@ import { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../store/Auth";
 import Loader from "../components/Loader";
-import LINK from "../store/Link";
 import {toast} from "react-toastify";
 import ChatroomRow from "../components/ChatroomRow";
 import { UserType } from "../store/Auth";
@@ -28,6 +27,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@radix-ui/react-label';
+import { CardType } from "@/store/Types";
+import { deleteChatroom, editChatroom } from "@/api/ManageChatrooms";
+import { fetchChatrooms } from "@/api/Home";
 
 
 
@@ -44,7 +46,6 @@ function ManageChatrooms() {
         }
     }, [isLoggedIn]);
 
-    
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
     const [selectedChatroomId, setChatroomId] = useState(0);
@@ -53,13 +54,6 @@ function ManageChatrooms() {
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-    type CardType = {
-        chatroomUserId:number,
-        chatroomName:string,
-        createdAt:Date,
-        creatorUsername:string
-        chatroomId:number
-    }
 
     function createChatroomRows(entry:CardType){
         return <ChatroomRow chatroomName={entry.chatroomName} createdAt={entry.createdAt} creatorUsername={entry.creatorUsername} 
@@ -67,107 +61,54 @@ function ManageChatrooms() {
         setChatroomMethod={setChatroomId} deleteHandler={setIsAlertDialogOpen} editHandler={setIsDialogOpen} setOldName={setOldName}/>
     }
 
-
-    async function deleteChatroom() {
+    async function deleteChatroomLocal() {
         try {
+            const data = {selectedChatroomId: selectedChatroomId, userId: user.userId};
             setLoading(true);
-            const response = await fetch(LINK + "api/chatroom/remove", {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    chatroomId:selectedChatroomId,
-                    userId: user.userId
-                })
-            });
-            if (response.ok) {
-                const response2 = await fetch(LINK + "api/chat/deleteChatroomChats", {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        chatroomId:selectedChatroomId,
-                        userId: user.userId
-                    })
-                })
-                fetchChatrooms();
-
-                if (!response2.ok) {
-                    const rest2_data = await response2.json();
-                    toast(rest2_data.message);
-                }
-            }
-            else {
-                const res_data = await response.json();
-                toast(res_data.message);
-            }
+            const response = await deleteChatroom(data);
+            fetchChatroomsLocal();
+            toast.success(response.message);
         }
-        catch {
-
+        catch (error){
+            if (error instanceof Error) toast.error(error.message);
         }
         finally {
             setLoading(false);
         }
     }
 
-    async function editChatroom() {
+    async function editChatroomLocal() {
         try {
+            const data = {selectedChatroomId: selectedChatroomId, editedName: editedName}
             setLoading(true);
-            const response = await fetch(LINK + "api/chatroom/edit", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    chatroomId:selectedChatroomId,
-                    chatroomName: editedName
-                })
-            });
-            const resp_data = await response.json();
-            toast(resp_data.message);
-            if (response.ok) fetchChatrooms();
+            const response = await editChatroom(data);
+            toast.success(response.message);
         }
-        catch {
-
+        catch (error) {
+            if (error instanceof Error) toast.error(error.message);
         }
         finally {
             setLoading(false);
         }
     }
 
-    async function fetchChatrooms() {
+    async function fetchChatroomsLocal() {
         try {
             setLoading(true);
-            const response = await fetch(LINK + "api/chatroom/fetch", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+            const response = await fetchChatrooms();
             setLoading(false);
-    
-            if (!response.ok) {
-                throw new Error("Failed to fetch chatrooms");
-            }
-    
-            const resp = await response.json();
-    
-            if (!Array.isArray(resp.chatrooms)) {
-                throw new Error("Invalid data format: chatrooms is not an array");
-            }
-    
-            setChatrooms(resp.chatrooms);
+            setChatrooms(response.chatrooms);
         } catch (error) {
-            setChatrooms([]); 
-        }   finally {
+            if (error instanceof Error) toast.error(error.message);
+            setChatrooms([]);
+        }
+        finally {
             setLoading(false);
         }
-
     }
+
     useEffect(()=>{
-        fetchChatrooms();
+        fetchChatroomsLocal();
     },[])
 
     if (isLoading) return <Loader />;
@@ -203,7 +144,7 @@ function ManageChatrooms() {
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel className="font-universal hover:bg-blue-400 text-white hover:text-white bg-blue-600" >Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={()=>{deleteChatroom(); setIsAlertDialogOpen(false)}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
+                <AlertDialogAction onClick={()=>{deleteChatroomLocal(); setIsAlertDialogOpen(false)}} className="font-universal hover:bg-blue-400 text-white bg-blue-600" >Continue</AlertDialogAction>
             </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
@@ -231,7 +172,7 @@ function ManageChatrooms() {
                 </div>
                 </div>
                 <DialogFooter>
-                <Button onClick={()=>{editChatroom(); setIsDialogOpen(false)    }} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Save changes</Button>
+                <Button onClick={()=>{editChatroomLocal(); setIsDialogOpen(false)    }} className='bg-blue-600 hover:bg-blue-400 text-white font-universal'>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
