@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
@@ -9,6 +8,7 @@ import { Send } from 'lucide-react';
 import { FaPenToSquare } from 'react-icons/fa6';
 import { FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import {ChatroomType, MessageType} from "../store/Types";
 
 import {
     AlertDialog,
@@ -33,6 +33,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@radix-ui/react-label';
+import { deleteMessage, editMessage, fetchMessages, fetchChatroom } from '@/api/Chatroom';
 
 
 const Chatroom = () => {
@@ -70,21 +71,7 @@ const Chatroom = () => {
         };
     }, [chatroomId]);
 
-    type ChatroomType = {
-        _id: string;
-        chatroomName: string;
-        creatorUserId: number;
-        creatorUsername: string;
-        createdAt: Date;
-        chatroomId: number;
-    };
-
-    type MessageType = {
-        userId: number;
-        username: string;
-        message: string;
-        timestamp: Date;
-    };
+    
     
     const chatEndRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
@@ -106,45 +93,7 @@ const Chatroom = () => {
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
     const [editedMessage, setEditedMessage] = useState<string>("");
 
-    const fetchMessages = async () => {
-        try {
-            const response = await fetch(LINK + `api/chat/fetch`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'Application/JSON',
-                },
-                body: JSON.stringify({
-                    chatroomId: chatroomId,
-                }),
-            });
-            const data = await response.json();
-            setMessages(data.chatrooms); 
-            setMessagesSet(true);
-        } catch (error) {
-            console.error('Error fetching messages:', error);
-        }
-    };
-
-    const fetchChatroom = async () => {
-        try {
-            const response = await fetch(LINK + `api/chatroom/getChatroom`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'Application/JSON',
-                },
-                body: JSON.stringify({
-                    chatroomId: chatroomId,
-                }),
-            });
-            const data = await response.json();
-            setChatroomData(data.chatroomInfo[0]);
-        } catch (error) {
-            console.error('Error fetching chatroom:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
+    
     const sendMessage = () => {
         if (newMessage.trim() && socket) {
             socket.emit('sendMessage', {
@@ -181,37 +130,27 @@ const Chatroom = () => {
         });
     };
     
-    async function deleteMessage () {
-        const msg:MessageType = selectedMessage!;
+    async function deleteMessageLocal() {
+        const msg = selectedMessage!;
         const data = {
             timestamp: msg.timestamp, 
             userId: msg.userId,
         };
-        
         if (msg.username != user.username && !user.isAdmin) {
             toast("User Not authorized");
             return;
         }
-        
-        const response = await fetch(LINK + "api/chat/delete", {
-            method:"PATCH",
-            headers:{
-                "Content-type":"Application/JSON"
-            },
-            body: JSON.stringify(data)
-        });
-        
+        const response = await deleteMessage(data);   
         if (response.ok) {
             toast("Successfully Deleted Message");
-            fetchMessages();
+            fetchMessages(Number(chatroomId));
         }
         else {
             toast("Error Deleting Message");
         }
-        
     }
-
-    async function editMessage (newMessage:string) {
+    
+    async function editMessageLocal() {
         const msg:MessageType = selectedMessage!;
         const data = {
             timestamp: msg.timestamp, 
@@ -224,25 +163,24 @@ const Chatroom = () => {
             return;
         }
         
-        const response = await fetch(LINK + "api/chat/update", {
-            method:"PATCH",
-            headers:{
-                "Content-type":"Application/JSON"
-            },
-            body: JSON.stringify(data)
-        });
-        
+        const response = await editMessage(data);    
         if (response.ok) {
             toast("Successfully Edited Message");
-            fetchMessages();
+            fetchMessages(Number(chatroomId));
         }
         else {
             toast("Error Editing Message");
         }
+    }
+
+    async function fetchMessagesLocal() {
         
     }
-    
-    
+
+    async function fetchChatroomLocal() {
+        
+    }
+
     if (loading) return <Loader />;
     return (
         <>
