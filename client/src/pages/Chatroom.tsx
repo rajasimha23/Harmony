@@ -142,7 +142,7 @@ const Chatroom = () => {
         };
         setLoading(true);
         try {
-            const response = await deleteMessage(data); 
+            await deleteMessage(data); 
             toast.success("Successfully Deleted Message");
             fetchMessagesLocal();  
         }   
@@ -167,7 +167,7 @@ const Chatroom = () => {
         };
         setLoading(true);
         try{
-            const response = await editMessage(data); 
+            await editMessage(data); 
             toast.success("Successfully Edited Message");
             fetchMessagesLocal();
         }

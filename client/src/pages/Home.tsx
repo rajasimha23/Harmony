@@ -90,7 +90,7 @@ function Home() {
         }
     
         try {
-            const response = await handleUpload(file);
+            await handleUpload(file);
             toast.success('File uploaded and data stored successfully!');
         } 
         catch (err) {
