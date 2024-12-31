@@ -31,7 +31,9 @@ jobs:
           npm install
   
       - name: Run tests
-        run: npm test
+        run: |
+          cd client
+          npm test
   
       - name: Build frontend
         run: |
