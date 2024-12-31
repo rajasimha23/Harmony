@@ -1,0 +1,39 @@
+name: MERN CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger on commits to the 'main' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Specify your Node.js version
+
+      - name: Install backend dependencies
+        run: |
+          cd server
+          npm install
+
+      - name: Install frontend dependencies
+        run: |
+          cd client
+          npm install
+  
+      - name: Run tests
+        run: npm test
+  
+      - name: Build frontend
+        run: |
+          cd client
+          npm run build
