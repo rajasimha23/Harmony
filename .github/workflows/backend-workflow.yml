@@ -1,0 +1,33 @@
+
+name: chatroom backend Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger on commits to the 'main' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Specify your Node.js version
+
+      - name: Install backend dependencies
+        run: |
+          cd server
+          npm install
+          npm install --save-dev jest
+  
+      - name: Run tests
+        run: |
+          cd server
+          npm test
