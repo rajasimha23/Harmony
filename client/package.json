@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "jest"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.12.0",
