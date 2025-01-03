@@ -13,6 +13,6 @@ scp -o StrictHostKeyChecking=no -i "$1" -r client/build ec2-user@"$2":"$APP_DIR"
 # Install dependencies and restart the backend
 ssh -o StrictHostKeyChecking=no -i "$1" ec2-user@"$2" << 'EOF'
 cd $APP_DIR/server
-npm install --production
+npm install --include=dev
 pm2 stop all || true  
 pm2 start server.js --name "chatroom-backend"
