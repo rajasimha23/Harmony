@@ -7,8 +7,8 @@ APP_DIR=/home/ec2-user/mern-app
 ssh -o StrictHostKeyChecking=no -i "$1" ec2-user@"$2" "mkdir -p $APP_DIR"
 
 # Transfer server and frontend files to the EC2 instance
-scp -o StrictHostKeyChecking=no -i "$1" -r server ec2-user@"$2":"$APP_DIR"/
-scp -o StrictHostKeyChecking=no -i "$1" -r client/build ec2-user@"$2":"$APP_DIR"/client
+scp -o StrictHostKeyChecking=no -i "$1" -r server ec2-user@"$2":"$APP_DIR"/server
+scp -o StrictHostKeyChecking=no -i "$1" -r client ec2-user@"$2":"$APP_DIR"/client
 
 # Install dependencies and restart the backend
 ssh -o StrictHostKeyChecking=no -i "$1" ec2-user@"$2" << 'EOF'
