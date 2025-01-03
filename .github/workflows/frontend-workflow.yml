@@ -24,8 +24,7 @@ jobs:
       - name: Install frontend dependencies
         run: |
           cd client
-          npm install
-          npm install --save-dev jest
+          npm install --include=dev
   
       - name: Run tests
         run: |
