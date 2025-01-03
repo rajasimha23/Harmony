@@ -4,7 +4,7 @@
 APP_DIR=/home/ubuntu/chatroom-app
 
 # Create application directory on EC2 instance
-ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" "rm -R /home/ubuntu/chatroom-app | mkdir -p $APP_DIR"
+ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" "rm -R /home/ubuntu/chatroom-app && mkdir -p $APP_DIR"
 
 tar --exclude='node_modules' -czf client.tar.gz ./client
 tar --exclude='node_modules' -czf server.tar.gz ./server
