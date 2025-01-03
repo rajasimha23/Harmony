@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-APP_DIR=/home/ec2-user/mern-app
+APP_DIR=/home/ec2-user/chatroom-app
 
 # Create application directory on EC2 instance
 ssh -o StrictHostKeyChecking=no -i "$1" ec2-user@"$2" "mkdir -p $APP_DIR"
