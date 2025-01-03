@@ -16,3 +16,4 @@ cd $APP_DIR/server
 npm install --include=dev
 pm2 stop all || true  
 pm2 start server.js --name "chatroom-backend"
+EOF
