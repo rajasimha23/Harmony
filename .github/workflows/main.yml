@@ -28,13 +28,13 @@ jobs:
       - name: Install backend dependencies
         run: |
           cd server
-          npm install
+          npm install --include=dev
        #  npm install --save-dev jest
 
       - name: Install frontend dependencies
         run: |
           cd client
-          npm install
+          npm install --include=dev
   
       - name: Run tests
         run: |
