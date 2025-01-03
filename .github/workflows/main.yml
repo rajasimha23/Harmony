@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Clean up previous files
+        run: |
+          rm -rf *
+
       # Step 1: Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -19,7 +24,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
+         
       - name: Install backend dependencies
         run: |
           cd server
@@ -51,6 +56,7 @@ jobs:
    
       - name: list all files
         run: |
+          
           ls -R
       
       - name: Deploy to AWS EC2
