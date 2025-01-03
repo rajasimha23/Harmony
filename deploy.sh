@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-APP_DIR=/home/ec2-user/chatroom-app
+APP_DIR=/home/ubuntu/chatroom-app
 
 # Create application directory on EC2 instance
 ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" "mkdir -p $APP_DIR"
