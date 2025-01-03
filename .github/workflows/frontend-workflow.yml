@@ -25,6 +25,7 @@ jobs:
         run: |
           cd client
           npm install
+          npm install --save-dev jest
   
       - name: Run tests
         run: |
