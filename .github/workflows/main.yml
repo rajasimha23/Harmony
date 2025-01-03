@@ -48,6 +48,11 @@ jobs:
    #      aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
    #      aws-region: ap-south-1
 
+   
+      - name: list all files
+        run: |
+          ls -R
+      
       - name: Deploy to AWS EC2
         run: |
           chmod +x deploy.sh
