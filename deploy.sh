@@ -4,7 +4,11 @@
 APP_DIR=/home/ubuntu/chatroom-app
 
 # Create application directory on EC2 instance
-ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" "rm -R /home/ubuntu/chatroom-app && mkdir -p $APP_DIR"
+ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" << 'EOF'
+rm -R /home/ubuntu/chatroom-app 
+mkdir -p $APP_DIR
+EOF
+
 
 tar --exclude='node_modules' -czf client.tar.gz ./client
 tar --exclude='node_modules' -czf server.tar.gz ./server
@@ -25,11 +29,17 @@ ssh -i "$1" ubuntu@"$2" "tar -xzf $APP_DIR/server.tar.gz -C $APP_DIR"
 
 # Install dependencies and restart the backend
 ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" << 'EOF'
+
+
 cd $APP_DIR/server
+rm -rf node_modules package-lock.json
 npm install --include=dev
 pm2 stop all || true  
 pm2 start npm --name "frontend" -- run dev
+
 cd $APP_DIR/client
+rm -rf node_modules package-lock.json
 npm install --include=dev
 pm2 start nodemon --name "backend" -- index.js
+
 EOF
