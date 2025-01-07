@@ -30,6 +30,7 @@ ssh -i "$1" ubuntu@"$2" "tar -xzf $APP_DIR/server.tar.gz -C $APP_DIR"
 # Install dependencies and restart the backend
 ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" << EOF
 
+pm2 delete all
 
 cd $APP_DIR/client
 rm -rf node_modules package-lock.json
