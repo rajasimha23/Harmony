@@ -27,7 +27,7 @@ ssh -i "$1" ubuntu@"$2" "tar -xzf $APP_DIR/server.tar.gz -C $APP_DIR"
 #scp -o StrictHostKeyChecking=no -i "$1" -r client ubuntu@"$2":"$APP_DIR"/client
 
 
-# Install dependencies and restart the backend
+# Install dependencies and restart the backend:
 ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" << EOF
 
 pm2 delete all
