@@ -50,6 +50,6 @@ pm2 start npm --name "frontend" -- run dev
 cd $APP_DIR/server
 rm -rf node_modules package-lock.json
 npm install --include=dev
-pm2 start nodemon --name "backend" -- index.js
+pm2 start node --name "backend" -- index.js
 
 EOF
