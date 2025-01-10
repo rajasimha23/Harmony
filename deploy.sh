@@ -19,13 +19,22 @@ scp -i "$1" server.tar.gz ubuntu@"$2":"$APP_DIR"
 ssh -i "$1" ubuntu@"$2" "tar -xzf $APP_DIR/client.tar.gz -C $APP_DIR"
 ssh -i "$1" ubuntu@"$2" "tar -xzf $APP_DIR/server.tar.gz -C $APP_DIR"
 
-#rsync -avz --exclude 'node_modules' ./server ubuntu@"$2":"$APP_DIR"/server
-#rsync -avz --exclude 'node_modules' ./client ubuntu@"$2":"$APP_DIR"/client
+# Install packages: npm, pm2, nodemon, nginx
+ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" << EOF
 
-# Transfer server and client files to the EC2 instance
-#scp -o StrictHostKeyChecking=no -i "$1" -r server ubuntu@"$2":"$APP_DIR"/server
-#scp -o StrictHostKeyChecking=no -i "$1" -r client ubuntu@"$2":"$APP_DIR"/client
+sudo apt update
+sudo apt install npm
+npm --version
+node --version
+npm install -g pm2
+pm2 --version
 
+sudo apt install nginx -y
+sudo nginx -t          
+sudo systemctl daemon-reload 
+sudo systemctl reload nginx
+
+EOF
 
 # Install dependencies and restart the backend:
 ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" << EOF
