@@ -23,10 +23,10 @@ ssh -i "$1" ubuntu@"$2" "tar -xzf $APP_DIR/server.tar.gz -C $APP_DIR"
 ssh -o StrictHostKeyChecking=no -i "$1" ubuntu@"$2" << EOF
 
 sudo apt update
-sudo apt install npm
+sudo apt install npm -y
 npm --version
 node --version
-npm install -g pm2
+npm install -g pm2 -y
 pm2 --version
 
 sudo apt install nginx -y
